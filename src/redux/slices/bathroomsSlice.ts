@@ -8,11 +8,13 @@ import { getReview } from './reviewsSlice';
 export interface BathroomState {
   loading: boolean
   all: Record<string, IBathroom>
+  selectedBathroomId: string,
 }
 
 const initialState: BathroomState = {
   loading: false,
   all: {},
+  selectedBathroomId: '',
 };
 
 export const getAllBathrooms = createAsyncThunk(
@@ -139,6 +141,7 @@ export const bathroomSlice = createSlice({
   reducers: {
     startBathroomLoading: (state) => ({ ...state, loading: true }),
     stopBathroomLoading: (state) => ({ ...state, loading: false }),
+    setSelectedBathroom: (state, action) => ({ ...state, selectedBathroomId: action.payload }),
   },
   extraReducers: (builder) => {
     builder.addCase(getAllBathrooms.fulfilled, (state, action) => {
@@ -176,7 +179,7 @@ export const bathroomSlice = createSlice({
   },
 });
 
-export const { startBathroomLoading, stopBathroomLoading } =
+export const { startBathroomLoading, stopBathroomLoading, setSelectedBathroom } =
   bathroomSlice.actions;
 
 export default bathroomSlice.reducer;

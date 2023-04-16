@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text } from 'native-base';
+import { Text, useDisclose, HStack, Actionsheet, Center } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import { useNavigation } from '@react-navigation/native';
@@ -16,12 +16,19 @@ import MapView, {
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
 import { MapStackRoutes } from 'navigation/routeTypes';
-import { getBathroomsByLocationRange } from 'redux/slices/bathroomsSlice';
+import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
 import AppButton from 'components/AppButton';
 import { StackRoutes } from 'nav/routeTypes';
 import { background } from 'native-base/lib/typescript/theme/styled-system';
+import Colors from 'utils/Colors';
 
 const MapPage = () => {
+  const {
+    isOpen,
+    onOpen,
+    onClose,
+  } = useDisclose();
+
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavType>();
   const mapRef = useRef<MapView>(null);
@@ -51,6 +58,12 @@ const MapPage = () => {
           longitude: coords.longitude,
         });
         await dispatch(getBathroomsByLocationRange({ latitude: coords.latitude, longitude: coords.longitude }));
+        mapRef?.current?.animateToRegion({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.1,
+        });
       })
       .catch((e) => {
         console.error(e);
@@ -84,13 +97,16 @@ const MapPage = () => {
                     latitude: allBathrooms[bathroomId].location.coordinates[1],
                     longitude: allBathrooms[bathroomId].location.coordinates[0],
                   }}
-                  onPress={() => console.log('')}
+                  onPress={() => {
+                    dispatch(setSelectedBathroom(bathroomId));
+                    onOpen();
+                  }}
                   style={{
                     alignItems: 'center',
                   }}
                 >
                   <Text color='white' fontSize={8} fontFamily={fonts.regular}>
-                    { allBathrooms[bathroomId].name }
+                    {allBathrooms[bathroomId].name}
                   </Text>
                   <View
                     style={{
@@ -125,45 +141,62 @@ const MapPage = () => {
         </Marker>
       </MapView>
       <AppButton
-        title = 'Settings'
-        onPress = {() => {
+        title='Settings'
+        onPress={() => {
 
         }}
       />
       <AppButton
         //Filters
         title=''
-        disabled = {false}
+        disabled={false}
         style={{
-          position : 'absolute',
-          top : '6.5%',
-          right : '5%',
-          backgroundColor : "#00B4C5",
+          position: 'absolute',
+          top: '6.5%',
+          right: '5%',
+          backgroundColor: '#00B4C5',
           borderRadius: 50,
-          height : 70,
-          width : 70
+          height: 70,
+          width: 70,
         }}
-        onPress = {() => {
-          navigation.navigate(StackRoutes.FILTER)
+        onPress={() => {
+          navigation.navigate(StackRoutes.FILTER);
         }}
       />
       <AppButton
         // Add location
-        title = ''
-        disabled = {false}
+        title=''
+        disabled={false}
         style={{
-          position : 'absolute',
-          bottom : '6.5%',
-          right : '5%',
-          backgroundColor : "#00BF7D",
+          position: 'absolute',
+          bottom: '6.5%',
+          right: '5%',
+          backgroundColor: '#00BF7D',
           borderRadius: 50,
-          height : 70,
-          width : 70
+          height: 70,
+          width: 70,
         }}
-        onPress = {() => {
+        onPress={() => {
 
         }}
       />
+      <Actionsheet isOpen={isOpen} onClose={() => {
+        dispatch(setSelectedBathroom(''));
+        onClose();
+      }}>
+        <Actionsheet.Content style={styles.actionSheetModal}>
+          <HStack>
+            <Text>
+              a
+            </Text>
+            <Text>
+              b
+            </Text>
+          </HStack>
+          <Actionsheet.Item onPress={() => console.log('hi')}>
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+      </Actionsheet>
     </>
   );
 };
@@ -174,6 +207,9 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  actionSheetModal: {
+    minHeight: 200,
   },
 });
 
