@@ -3,8 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavList, StackRoutes } from './routeTypes';
 import { MapPage, FilterPage, InfoPage } from 'screens';
-import AddLocationPage from 'screens/AddLocationPage';
-import useAppSelector from 'hooks/useAppSelector';
+import AddLocPage from 'screens/AddLocationPage';
 import useAppDispatch from 'hooks/useAppDispatch';
 import { getAllReviews } from 'redux/slices/reviewsSlice';
 
@@ -16,7 +15,7 @@ function RootNavigation() {
   useEffect(() => {
     dispatch(getAllReviews({}));
   }, []);
-  
+
   return (
     <NavigationContainer>
       <BaseStack.Navigator initialRouteName={StackRoutes.MAP}>
