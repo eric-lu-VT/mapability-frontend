@@ -239,7 +239,7 @@ function MapPage() {
             onPress={() => {
               onClose();
               console.log(textAreaValue);
-              dispatch(createReview({ bathroomId: selectedBathroomId, rating: 1, comment: textAreaValue }))
+              dispatch(createReview({ bathroomId: selectedBathroomId, rating: 1, comment: textAreaValue }));
             }}
           >
             <Text style={{ color: '#00B4C5', fontFamily: fonts.semiBold, fontSize: 16 }}>Add Comment</Text>
