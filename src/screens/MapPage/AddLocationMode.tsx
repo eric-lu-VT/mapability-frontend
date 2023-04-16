@@ -9,6 +9,7 @@ import { resetGooglePlace } from 'redux/slices/googleSlice';
 import { View, Text } from 'native-base';
 import TextStyles from '../../utils/TextStyles';
 import { fonts } from '../../utils/constants';
+import { Feather } from '@expo/vector-icons';
 
 type AddLocationModeProps = {
   setPageMode: React.Dispatch<React.SetStateAction<MapPageMode>>,
@@ -35,6 +36,10 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
             justifyContent: 'center',
             width: 350,
             backgroundColor: '#D9D9D9',
+            shadowColor: '#171717',
+            shadowOffset: { width: -2, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
           }}
         >
           <Text
@@ -61,14 +66,19 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
           borderRadius: 50,
           height: 70,
           width: 185,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
         }}
+        textColor={'black'}
         onPress={() => {
           setPageMode('MainMap');
           navigation.navigate(StackRoutes.ADD_LOC);
         }}
       />
       <AppButton
-        title='-'
+        title=''
         disabled={false}
         style={{
           position: 'absolute',
@@ -78,12 +88,18 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
           borderRadius: 50,
           height: 70,
           width: 70,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
         }}
         onPress={() => {
           dispatch(resetGooglePlace());
           setPageMode('MainMap');
         }}
-      />
+      >
+        <Feather name='minus' size={30} color='black' style={{ paddingTop: 5 }}/>
+      </AppButton>
     </>
   );
 }

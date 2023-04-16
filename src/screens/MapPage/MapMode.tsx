@@ -32,12 +32,16 @@ function MapMode({ setPageMode }: MapModeProps) {
           borderRadius: 50,
           height: 70,
           width: 70,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
         }}
         onPress={() => {
           navigation.navigate(StackRoutes.FILTER);
         }}
       >
-        <Ionicons name='filter-sharp' size={30} color='black' style={{ paddingTop: 5 }}/>
+        <Ionicons name='filter-sharp' size={35} color='black' style={{ paddingTop: 5 }}/>
       </AppButton>
       <AppButton
         // Add location
@@ -51,6 +55,10 @@ function MapMode({ setPageMode }: MapModeProps) {
           borderRadius: 50,
           height: 70,
           width: 70,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
         }}
         onPress={() => {
           dispatch(googleReverseGeocode({ 
