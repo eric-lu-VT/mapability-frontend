@@ -32,7 +32,7 @@ export const getAllReviews = createAsyncThunk(
 
 export const createReview = createAsyncThunk(
   'reviews/createReview',
-  async (req: { title: string, description: string, value: number }, { dispatch }) => {
+  async (req: { bathroomId: string, rating: number, comment: string }, { dispatch }) => {
     dispatch(startReviewLoading());
     return axios
       .post(`${SERVER_URL}reviews/`, req)

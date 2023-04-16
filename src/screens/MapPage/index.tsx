@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, useDisclose, VStack, Actionsheet } from 'native-base';
+import { Text, useDisclose, VStack, HStack, Actionsheet, TextArea } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import * as Location from 'expo-location';
@@ -26,6 +26,7 @@ import { useNavigation } from '@react-navigation/native';
 import NavType from 'utils/NavType';
 import { StackRoutes } from '../../nav/routeTypes';
 import { BackButton } from 'components/NavButtons';
+import { createReview } from 'redux/slices/reviewsSlice';
 
 export type MapPageMode =
   | 'MainMap'
@@ -46,7 +47,7 @@ function MapPage() {
   const [locationPermissionStatus, setLocationPermissionStatus] =
     useState<PermissionStatus>();
 
-  const filter = useAppSelector((state) => state.filter); 
+  const filter = useAppSelector((state) => state.filter);
   const { latitude, longitude, tempLatitude, tempLongitude } = useAppSelector((state) => state.connection);
   const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
   useEffect(() => {
@@ -85,6 +86,7 @@ function MapPage() {
   const [pageMode, setPageMode] = useState<MapPageMode>('MainMap');
 
   const [isSatelliteMode, setIsSatelliteMode] = useState(false);
+  const [textAreaValue, setTextAreaValue] = useState(' ');
 
   return (
     <>
@@ -220,32 +222,36 @@ function MapPage() {
         <Actionsheet.Content style={styles.actionSheetModal}>
           {
             selectedBathroomId &&
-            <VStack
-              style={{
-                alignItems: 'center',
+            <TextArea
+              value={textAreaValue} 
+              onChangeText={e => {
+                setTextAreaValue(e);
               }}
-            >
-              <Text>
-                {allBathrooms[selectedBathroomId].name}
-              </Text>
-              <Text>
-                {
-                  (
-                    new Haversine(2).getDistance(
-                      new DDPoint(latitude, longitude),
-                      new DDPoint(allBathrooms[selectedBathroomId]?.location?.coordinates[1], allBathrooms[selectedBathroomId]?.location?.coordinates[0])).toFixed(2)
-                  ) + ' miles away'
-                }
-              </Text>
-            </VStack>
+              h={20} 
+              placeholder="Write your comment here" 
+              w="90%" 
+              maxW="300"
+              autoCompleteType={''} 
+            />
           }
-          <Actionsheet.Item 
-            style={{ alignItems: 'center' }} 
-            onPress={() => { 
+          <Actionsheet.Item
+            style={{ alignItems: 'center' }}
+            onPress={() => {
               onClose();
-              navigation.navigate(StackRoutes.MORE_INFO, { selectedBathroomId }); 
-            }}>
-            <Text style={{ color: '#00B4C5', fontFamily: fonts.semiBold, fontSize: 16 }}>See Info</Text>
+              console.log(textAreaValue);
+              dispatch(createReview({ bathroomId: selectedBathroomId, rating: 1, comment: textAreaValue }))
+            }}
+          >
+            <Text style={{ color: '#00B4C5', fontFamily: fonts.semiBold, fontSize: 16 }}>Add Comment</Text>
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            style={{ alignItems: 'center' }}
+            onPress={() => {
+              onClose();
+              navigation.navigate(StackRoutes.MORE_INFO, { selectedBathroomId });
+            }}
+          >
+            <Text style={{ color: '#00B4C5', fontFamily: fonts.semiBold, fontSize: 16 }}>See More Info</Text>
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -261,7 +267,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionSheetModal: {
-    minHeight: 150,
+    minHeight: 550,
   },
 });
 
