@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { Text, Input, Stack, FormControl, Radio, Checkbox } from 'native-base';
-import { Resource } from 'screens/AddLocationPage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import useAppSelector from 'hooks/useAppSelector';
@@ -17,11 +16,16 @@ type FormProps = {
 
 export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
   const dispatch = useAppDispatch();
+  const { latitude, longitude } = useAppSelector((state) => state.connection);
 
   const handleSubmit = () => {
-    // dispatch(createBathroom({
-
-    // }));
+    dispatch(createBathroom({
+      ...resource,
+      location: {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+      },
+    }));
   };
 
   return (
@@ -156,13 +160,13 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
               });
             }}
           />
-          <AppButton
-            onPress={() => handleSubmit()}
-            title={'Add Location'}
-            textColor='white'
-            fullWidth
-          />
         </View>
+        <AppButton
+          onPress={() => handleSubmit()}
+          title={'Add Location'}
+          textColor='black'
+          fullWidth
+        />
       </FormControl>
     </ScrollView>
   );

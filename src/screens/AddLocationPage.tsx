@@ -11,21 +11,6 @@ import { BackButton } from 'components/NavButtons';
 import FormatStyle from 'utils/FormatStyle';
 import { IBathroom } from 'types/bathrooms';
 
-export type Resource = {
-  name: string;
-  // TODO: Add location
-  description: string;
-  unisex: boolean;
-  isAccessible: boolean;
-  levels: number[];
-  hasElevatorAccess: boolean;
-  isSingleUse: boolean;
-  buildingRampAccess: boolean;
-  changingTable: boolean;
-  accessibleDoor: boolean;
-  hasMentstrualProducts: boolean;
-  reviews: string[];
-};
 const AddLocationPage = () => {
   const [resource, setResource] = useState<Omit<IBathroom, 'id' | 'location'>>({
     name: '',

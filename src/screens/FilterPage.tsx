@@ -5,6 +5,7 @@ import useAppSelector from 'hooks/useAppSelector';
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { FilterState, setFilter } from 'redux/slices/filterSlice';
+import { BackButton } from 'components/NavButtons';
 
 const ResourceTypes = ['Bathroom', 'Parking Lot', 'Elevator', 'Ramp'];
 
@@ -44,6 +45,9 @@ function FilterPage() {
 
   return (
     <View style={styles.container}>
+      <View style={{ position: 'absolute', top: 50, left: 20, zIndex: 100 }}>
+        <BackButton />
+      </View>
       <Text style={styles.header}>Filter</Text>
 
       <View style={styles.sectionContainer}>

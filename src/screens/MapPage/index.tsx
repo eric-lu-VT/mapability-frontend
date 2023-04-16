@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { Text, useDisclose, HStack, VStack, Actionsheet, Center } from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Text, useDisclose, VStack, Actionsheet } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import * as Location from 'expo-location';
 import { PermissionStatus } from 'expo-modules-core';
 import MapView, {
   Marker,
-  Polygon,
-  Region,
-  LatLng,
-  Polyline,
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
@@ -26,6 +22,10 @@ import AddLocationMode from './AddLocationMode';
 import SearchMode from './SearchMode';
 import VectorIcon from '../../assets/VectorIcon.svg';
 import { FontAwesome5, Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import NavType from 'utils/NavType';
+import { StackRoutes } from '../../nav/routeTypes';
+import { BackButton } from 'components/NavButtons';
 
 export type MapPageMode =
   | 'MainMap'
@@ -34,6 +34,7 @@ export type MapPageMode =
   | 'Search';
 
 function MapPage() {
+  const navigation = useNavigation<NavType>();
   const {
     isOpen,
     onOpen,
@@ -248,7 +249,13 @@ function MapPage() {
               }
             </VStack>
           }
-          <Actionsheet.Item onPress={() => console.log('hi')}>
+          <Actionsheet.Item 
+            style={{ alignItems: 'center' }} 
+            onPress={() => { 
+              onClose();
+              navigation.navigate(StackRoutes.MORE_INFO); 
+            }}>
+            <Text style={{ color: Colors.primary, fontFamily: fonts.semiBold, fontSize: 16 }}>See Info</Text>
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
