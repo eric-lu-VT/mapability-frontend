@@ -1,13 +1,48 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const InfoPage = () => {
+type CommentProps = {
+  text: string,
+};
+function Comment({ text }: CommentProps) {
+  return (
+    <View style={{
+      width: '100%',
+      flexDirection: 'row',
+      paddingVertical: 10,
+      alignItems: 'center',
+    }}>
+      <View style={styles.icon}>
+        <Text style={styles.text}>Thumbs Icon</Text>
+      </View>
+      <View style={{
+        width: 'auto',
+      }}>
+        <Text style={{
+          right: 0,
+          backgroundColor: '#000000',
+        }}>{text}</Text>
+      </View>
+    </View>
+  );
+}
+
+function InfoPage() {
   return (
     <View style={styles.container}>
-      <View style={[styles.row, styles.header]}>
-        <Text style={styles.headerText}>Info</Text>
-      </View>
-      <View style={styles.row}>
+      <Text style={[styles.headerText, {
+        width: '100%',
+        textAlign: 'center',
+      }]}>
+        Info
+      </Text>
+
+      <View style={{
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-around',
+      }}>
         <View style={styles.column}>
           <View style={styles.icon}>
             <Text style={styles.text}>Bathroom Icon</Text>
@@ -21,68 +56,59 @@ const InfoPage = () => {
           <Text style={styles.text}>Accessibility Score</Text>
         </View>
       </View>
+
+      <View style={{
+        position: 'relative',
+        width: '100%',
+      }}>
+        <Text style={{
+          position: 'absolute',
+          left: 0,
+          right: '50%',
+          textAlign: 'right',
+        }}>Was this bathroom accessible?</Text>
+        <View style={{
+          position: 'absolute',
+          left: '50%',
+          right: 0,
+          flexDirection: 'row',
+        }}>
+          <View style={styles.icon}>
+            <Text style={styles.text}>Thumbs Icon</Text>
+          </View>
+          <View style={styles.icon}>
+            <Text style={styles.text}>Thumbs Icon</Text>
+          </View>
+        </View>
+      </View>
+
       <View style={[styles.row, styles.twoColumns]}>
-        <View style={styles.column}>
-          <Text style={styles.text}>Was this bathroom accessible?</Text>
-        </View>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Thumbs Icon</Text>
-        </View>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Thumbs Icon</Text>
-        </View>
+        <Text style={styles.text}>Row 3, Column 1</Text>
+        <Text style={styles.text}>Row 3, Column 2</Text>
       </View>
-      <View style={[styles.row, styles.twoColumns]}>
-        <View style={styles.column}>
-          <Text style={styles.text}>Row 3, Column 1</Text>
-        </View>
-        <View style={styles.column}>
-          <Text style={styles.text}>Row 3, Column 2</Text>
-        </View>
+
+      <View style={[styles.row, styles.commentSectionHeader]}>
+        <Text style={styles.text}> Comments </Text>
+        <Text style={[styles.text, styles.icon]}>Add Comment Icon</Text>
       </View>
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <Text style={styles.text}> Comments </Text>
-        </View>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Add Comment Icon</Text>
-        </View>
-        <View style={[styles.row, styles.twoColumns]}></View>
-      </View>
-      <View style={[styles.row, styles.twoColumns]}>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Thumbs Icon</Text>
-        </View>
-        <View style={styles.column}>
-          <Text style={styles.text}>Comment</Text>
-        </View>
-      </View>
-      <View style={[styles.row, styles.twoColumns]}>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Thumbs Icon</Text>
-        </View>
-        <View style={styles.column}>
-          <Text style={styles.text}>Comment</Text>
-        </View>
-      </View>
-      <View style={[styles.row, styles.twoColumns]}>
-        <View style={styles.icon}>
-          <Text style={styles.text}>Thumbs Icon</Text>
-        </View>
-        <View style={styles.column}>
-          <Text style={styles.text}>Comment</Text>
-        </View>
-      </View>
+
+      <Comment text='beepboop' />
+      <Comment text='beepboop' />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: '10%',
+    paddingTop: '20%',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    bottom: 0,
   },
   row: {
     flexDirection: 'row',
@@ -120,6 +146,19 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     textAlign: 'center',
+  },
+  commentSectionHeader: {
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  commentCard: {
+    width: '100%',
+  },
+  commentText: {
+    flexGrow: 5,
+  },
+  rightJustify: {
+    textAlign: 'right',
   },
 });
 
