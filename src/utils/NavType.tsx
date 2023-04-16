@@ -1,4 +1,4 @@
-import { MapStackRoutes } from 'navigation/routeTypes';
+import { StackRoutes } from 'nav/routeTypes';
 
 interface NavType {
   navigate: (value: string, params?: object) => void
@@ -6,8 +6,7 @@ interface NavType {
 }
 
 export type RootStackParamList = {
-  [MapStackRoutes.MAP]: undefined;
+  [StackRoutes.MORE_INFO]: undefined,
 };
-
 
 export default NavType;
