@@ -16,6 +16,7 @@ import MapView, {
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
 import { MapStackRoutes } from 'navigation/routeTypes';
+import { getBathroomsByLocationRange } from 'redux/slices/bathroomsSlice';
 
 const MapPage = () => {
   const dispatch = useAppDispatch();
@@ -46,11 +47,14 @@ const MapPage = () => {
           latitude: coords.latitude,
           longitude: coords.longitude,
         });
+        await dispatch(getBathroomsByLocationRange({ latitude: coords.latitude, longitude: coords.longitude }));
       })
       .catch((e) => {
         console.error(e);
       });
   };
+
+  const allBathrooms = useAppSelector((state) => state.bathrooms.all);
 
   return (
     <>
@@ -67,6 +71,36 @@ const MapPage = () => {
           }
         }}
       >
+        {
+          Object.keys(allBathrooms)
+            .map((bathroomId: string, index: number) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={{
+                    latitude: allBathrooms[bathroomId].location.coordinates[1],
+                    longitude: allBathrooms[bathroomId].location.coordinates[0],
+                  }}
+                  onPress={() => console.log('')}
+                  style={{
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text color='white' fontSize={8} fontFamily={fonts.regular}>
+                    { allBathrooms[bathroomId].name }
+                  </Text>
+                  <View
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: 10 / 2,
+                      backgroundColor: 'red',
+                    }}
+                  />
+                </Marker>
+              );
+            })
+        }
         <Marker
           key={'Your Pos'}
           coordinate={userPos}

@@ -1,22 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { SERVER_URL } from '../../utils/constants.js';
 import axios from 'axios';
-import { IBathroom } from 'types/bathrooms.jsx';
+import { IBathroom } from 'types/bathrooms';
+import { IReview } from 'types/reviews';
+import { getReview } from './reviewsSlice.js';
 
 export interface BathroomState {
   loading: boolean
   all: Record<string, IBathroom>
-  indices: {
-    byValue: Record<number, string> // value => id
-  }
 }
 
 const initialState: BathroomState = {
   loading: false,
   all: {},
-  indices: {
-    byValue: {},
-  },
 };
 
 export const getAllBathrooms = createAsyncThunk(
@@ -70,6 +66,39 @@ export const getBathroom = createAsyncThunk(
   },
 );
 
+export const getBathroomsByLocationRange = createAsyncThunk(
+  'bathrooms/getBathroomsByLocationRange',
+  async (req: { latitude: number, longitude: number }, { dispatch }) => {
+    dispatch(startBathroomLoading());
+    return axios
+      .get(`${SERVER_URL}bathrooms?searchLng=${req.longitude}&searchLat=${req.latitude}&searchRadius=${10}`)
+      .then(async (response) => {
+        if (response.data != null) {
+          try {
+            await Promise.all(
+              await response.data.forEach(async (bathroom: IBathroom) => {
+                await bathroom.reviews.forEach(async (review: IReview) => {
+                  await dispatch(getReview(review.id));
+                });
+              }),
+            );
+          } catch (e: any) {
+            // suppress
+          }
+        } else {
+          console.log('response.data null');
+        }
+        
+        return response.data;
+      })
+      .catch((error) => {
+        console.error('Error when getting bathrooms', error);
+        return false;
+      })
+      .finally(() => dispatch(stopBathroomLoading()));
+  },
+);
+
 export const updateBathroom = createAsyncThunk(
   'bathrooms/updateBathroom',
   async (req: IBathroom, { dispatch }) => {
@@ -116,31 +145,26 @@ export const bathroomSlice = createSlice({
       const bathrooms: IBathroom[] = action.payload as IBathroom[];
       bathrooms.forEach((bathroom: IBathroom) => {
         state.all[bathroom.id] = bathroom;
-        state.indices.byValue[bathroom.value] = bathroom.id;
       });
     });
     builder.addCase(createBathroom.fulfilled, (state, action) => {
       const bathroom: IBathroom = action.payload as IBathroom;
       state.all[bathroom.id] = bathroom;
-      state.indices.byValue[bathroom.value] = bathroom.id;
       alert('Created bathroom as: ' + JSON.stringify(action.payload));
     });
     builder.addCase(getBathroom.fulfilled, (state, action) => {
       const bathroom: IBathroom = action.payload as IBathroom;
       state.all[bathroom.id] = bathroom;
-      state.indices.byValue[bathroom.value] = bathroom.id;
       alert('Retrieved bathroom as: ' + JSON.stringify(action.payload));
     });
     builder.addCase(updateBathroom.fulfilled, (state, action) => {
       const bathroom: IBathroom = action.payload as IBathroom;
       state.all[bathroom.id] = bathroom;
-      state.indices.byValue[bathroom.value] = bathroom.id;
       alert('Updated bathroom to: ' + JSON.stringify(action.payload));
     });
     builder.addCase(deleteBathroom.fulfilled, (state, action) => {
       const bathroom: IBathroom = action.payload as IBathroom;
       delete state.all[bathroom.id];
-      delete state.indices.byValue[bathroom.value];
       alert('Deleted bathroom with id ' + bathroom.id);
     });
   },
