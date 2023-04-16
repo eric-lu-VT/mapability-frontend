@@ -36,7 +36,7 @@ export const getAllBathrooms = createAsyncThunk(
 
 export const createBathroom = createAsyncThunk(
   'bathrooms/createBathroom',
-  async (req: { title: string, description: string, value: number }, { dispatch }) => {
+  async (req: Omit<IBathroom, 'id'>, { dispatch }) => {
     dispatch(startBathroomLoading());
     return axios
       .post(`${SERVER_URL}bathrooms/`, req)
@@ -79,9 +79,7 @@ export const getBathroomsByLocationRange = createAsyncThunk(
           try {
             await Promise.all(
               await response.data.forEach(async (bathroom: IBathroom) => {
-                await bathroom.reviews.forEach(async (review: IReview) => {
-                  await dispatch(getReview(review.id));
-                });
+
               }),
             );
           } catch (e: any) {
