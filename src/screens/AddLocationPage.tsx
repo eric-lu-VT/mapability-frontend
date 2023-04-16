@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BackButton } from 'components/NavButtons';
 import FormatStyle from 'utils/FormatStyle';
+import { genStyles } from '../styles';
 
 export type Resource = {
   name: string;
@@ -54,6 +55,7 @@ const AddLocationPage = () => {
       <View style={styles.row}>
         <Text style={styles.headerText}>Add Location</Text>
       </View>
+      <Text style={genStyles.header}>Add Location</Text>
 
       <View style={styles.row}>
         <Form resource={resource} setResource={(newResource)=> {
