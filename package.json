@@ -38,6 +38,7 @@
     "expo-media-library": "^14.2.0",
     "expo-modules-core": "^0.11.10",
     "expo-status-bar": "~1.4.0",
+    "haversine-ts": "^1.2.0",
     "native-base": "^3.4.28",
     "querystring": "^0.2.1",
     "react": "18.0.0",
