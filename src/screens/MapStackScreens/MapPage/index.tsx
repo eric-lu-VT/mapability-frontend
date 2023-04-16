@@ -124,12 +124,12 @@ const MapPage = () => {
                   <Text color='white' fontSize={8} fontFamily={fonts.regular}>
                     {allBathrooms[bathroomId].name}
                   </Text>
-                  {/* <Image
+                  <Image
                     source={require('../../../../assets/Vector.png')}
                     style={{
                       paddingBottom: 10,
                     }}
-                  /> */}
+                  />
                 </Marker>
               );
             })
@@ -152,7 +152,6 @@ const MapPage = () => {
               backgroundColor: 'red',
             }}
           >
-           <VectorSVG style={{ paddingbottom : 10 }}/>
                   
           </View> 
         </Marker>
