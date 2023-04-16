@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
-import RootNavigation from './src/navigation';
+import RootNavigation from './src/nav';
 import { useFonts, Raleway_400Regular, Raleway_600SemiBold, Raleway_800ExtraBold } from '@expo-google-fonts/raleway';
 import { Montserrat_600SemiBold, Montserrat_400Regular, Montserrat_500Medium } from '@expo-google-fonts/montserrat';
 import { NativeBaseProvider, extendTheme } from 'native-base';
