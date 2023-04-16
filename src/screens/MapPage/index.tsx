@@ -45,6 +45,7 @@ function MapPage() {
   const [locationPermissionStatus, setLocationPermissionStatus] =
     useState<PermissionStatus>();
 
+  const filter = useAppSelector((state) => state.filter); 
   const { latitude, longitude, tempLatitude, tempLongitude } = useAppSelector((state) => state.connection);
   const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
   useEffect(() => {
