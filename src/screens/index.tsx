@@ -10,7 +10,7 @@ import {
 } from './BaseScreens';
 
 import {
-  MapPage, FiltersPage, 
+  MapPage, FiltersPage, InfoPage,
 } from './MapStackScreens';
 
 
@@ -27,4 +27,5 @@ export {
   MapPage,
   FiltersPage,
   ProfilePage,
+  InfoPage,
 };
