@@ -16,6 +16,7 @@ import MapView, {
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
+import { googleReverseGeocode } from 'redux/slices/googleSlice';
 import AppButton from 'components/AppButton';
 import Colors from 'utils/Colors';
 import {
@@ -23,9 +24,9 @@ import {
   Haversine,
   UnitOfDistance,
 } from 'haversine-ts';
-import MapMode from './MapMode';
-import AddLocationMode from './AddLocationMode';
-// import MyIcon from '../../../../assets/Vector.png'
+import { SvgCssUri } from 'react-native-svg';
+import VectorSVG from '../../../../assets/Vector.svg';
+
 
 export type MapPageMode =
   | 'MainMap'
@@ -148,7 +149,10 @@ const MapPage = () => {
               borderRadius: 10 / 2,
               backgroundColor: 'red',
             }}
-          />
+          >
+           {/* <VectorSVG style={{ paddingbottom : 10 }}/> */}
+                  
+          </View> 
         </Marker>
       </MapView>
       <AppButton
