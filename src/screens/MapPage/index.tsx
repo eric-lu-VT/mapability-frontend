@@ -23,6 +23,8 @@ import {
 } from 'haversine-ts';
 import MapMode from './MapMode';
 import AddLocationMode from './AddLocationMode';
+import VectorIcon from '../../assets/VectorIcon.svg';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export type MapPageMode =
   | 'MainMap'
@@ -112,15 +114,10 @@ function MapPage() {
                     alignItems: 'center',
                   }}
                 >
-                  <Text color='white' fontSize={8} fontFamily={fonts.regular}>
+                  <Text color='black' fontSize={8} fontFamily={fonts.regular}>
                     {allBathrooms[bathroomId].name}
                   </Text>
-                  {/* <Image
-                    source={require('../../../../assets/Vector.png')}
-                    style={{
-                      paddingBottom: 10,
-                    }}
-                  /> */}
+                  <VectorIcon width={20} height={20} />
                 </Marker>
               );
             })
@@ -132,7 +129,7 @@ function MapPage() {
             alignItems: 'center',
           }}
         >
-          <Text color='white' fontSize={8} fontFamily={fonts.regular}>
+          <Text color='black' fontSize={8} fontFamily={fonts.regular}>
             Your position
           </Text>
           <View
@@ -155,6 +152,27 @@ function MapPage() {
             <>
             </>
       }
+      <AppButton
+        //Filters
+        title=''
+        disabled={false}
+        style={{
+          position: 'absolute',
+          top: '6.5%',
+          left: '5%',
+          backgroundColor: '#7657E2',
+          borderRadius: 50,
+          height: 70,
+          width: 70,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+        }}
+        onPress={() => {}}
+      >
+        <FontAwesome5 name='satellite-dish' size={30} color='black' style={{ paddingTop: 5 }}/>
+      </AppButton>
       <Actionsheet isOpen={isOpen} onClose={() => {
         dispatch(setSelectedBathroom(''));
         onClose();
