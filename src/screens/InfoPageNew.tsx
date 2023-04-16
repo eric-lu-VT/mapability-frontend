@@ -91,7 +91,7 @@ function InfoPage() {
           <Comment text='Beep' />
           <Comment text='Boop' />
           <Comment text='This is a really long comment. See how it looks' />
-          <Comment text='This is an even longer comment. It might spill over into the next line.' />
+          <Comment text='This is an even longer comment. It might spill over into a next line, or possibly even a third.' />
         </View>
       </View>
     </View>

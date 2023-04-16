@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 type CommentProps = {
   text: string,
