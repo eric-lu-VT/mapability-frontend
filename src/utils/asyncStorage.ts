@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AsyncStorage } from 'react-native';
 
 export const authTokenName = 'authToken';
 export const spotifyTokenName = 'spotifyToken';
