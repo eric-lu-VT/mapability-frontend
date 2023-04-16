@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Text, useDisclose, HStack, VStack, Actionsheet, Center } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
@@ -26,6 +26,7 @@ import {
   Haversine,
   UnitOfDistance,
 } from 'haversine-ts';
+// import MyIcon from '../../../../assets/Vector.png'
 
 const MapPage = () => {
   const {
@@ -67,8 +68,8 @@ const MapPage = () => {
         mapRef?.current?.animateToRegion({
           latitude: coords.latitude,
           longitude: coords.longitude,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         });
       })
       .catch((e) => {
@@ -85,14 +86,17 @@ const MapPage = () => {
         style={styles.map}
         userInterfaceStyle='light'
         ref={mapRef}
-        mapType={'satellite'}
+        mapType={'standard'}
         showsCompass={true}
         showsScale={true}
+        followsUserLocation = {true}
         onMapReady={async () => {
           if (locationPermissionStatus === PermissionStatus.GRANTED) {
             await getCurrentLocation();
           }
-        }}
+        }
+        
+      }
       >
         {
           !isAddMode && Object.keys(allBathrooms)
@@ -115,12 +119,10 @@ const MapPage = () => {
                   <Text color='white' fontSize={8} fontFamily={fonts.regular}>
                     {allBathrooms[bathroomId].name}
                   </Text>
-                  <View
+                  <Image 
+                    source={require('../../../../assets/Vector.svg')}
                     style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: 10 / 2,
-                      backgroundColor: 'red',
+                      paddingBottom : 10
                     }}
                   />
                 </Marker>
@@ -136,7 +138,7 @@ const MapPage = () => {
         >
           <Text color='white' fontSize={8} fontFamily={fonts.regular}>
             Your position
-          </Text>
+          </Text> 
           <View
             style={{
               width: 10,
@@ -144,11 +146,21 @@ const MapPage = () => {
               borderRadius: 10 / 2,
               backgroundColor: 'red',
             }}
-          />
+          /> 
         </Marker>
       </MapView>
       <AppButton
-        title='Settings'
+        title="____"
+        disabled={false}
+        style={{
+          position: 'absolute',
+          top: '6.5%',
+          left: '5%',
+          backgroundColor: '#00B4C5',
+          borderRadius: 0,
+          height: 70,
+          width: 70,
+        }}
         onPress={() => {
 
         }}
