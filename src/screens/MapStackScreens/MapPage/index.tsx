@@ -17,6 +17,9 @@ import MapView, {
 import { fonts } from 'utils/constants';
 import { MapStackRoutes } from 'navigation/routeTypes';
 import { getBathroomsByLocationRange } from 'redux/slices/bathroomsSlice';
+import AppButton from 'components/AppButton';
+import { StackRoutes } from 'nav/routeTypes';
+import { background } from 'native-base/lib/typescript/theme/styled-system';
 
 const MapPage = () => {
   const dispatch = useAppDispatch();
@@ -60,9 +63,9 @@ const MapPage = () => {
     <>
       <MapView
         style={styles.map}
-        userInterfaceStyle='dark'
+        userInterfaceStyle='light'
         ref={mapRef}
-        mapType={'standard'}
+        mapType={'satellite'}
         showsCompass={true}
         showsScale={true}
         onMapReady={async () => {
@@ -121,6 +124,46 @@ const MapPage = () => {
           />
         </Marker>
       </MapView>
+      <AppButton
+        title = 'Settings'
+        onPress = {() => {
+
+        }}
+      />
+      <AppButton
+        //Filters
+        title=''
+        disabled = {false}
+        style={{
+          position : 'absolute',
+          top : '6.5%',
+          right : '5%',
+          backgroundColor : "#00B4C5",
+          borderRadius: 50,
+          height : 70,
+          width : 70
+        }}
+        onPress = {() => {
+          navigation.navigate(StackRoutes.FILTER)
+        }}
+      />
+      <AppButton
+        // Add location
+        title = ''
+        disabled = {false}
+        style={{
+          position : 'absolute',
+          bottom : '6.5%',
+          right : '5%',
+          backgroundColor : "#00BF7D",
+          borderRadius: 50,
+          height : 70,
+          width : 70
+        }}
+        onPress = {() => {
+
+        }}
+      />
     </>
   );
 };

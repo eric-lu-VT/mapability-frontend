@@ -10,8 +10,9 @@ import {
 } from './BaseScreens';
 
 import {
-  MapPage,
+  MapPage, FiltersPage, 
 } from './MapStackScreens';
+
 
 import {
   ProfilePage,
@@ -24,5 +25,6 @@ export {
   FrontPage,
   ForbiddenPage,
   MapPage,
+  FiltersPage,
   ProfilePage,
 };

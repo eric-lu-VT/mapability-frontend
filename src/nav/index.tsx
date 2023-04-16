@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavList, StackRoutes } from './routeTypes';
-import { MapPage } from 'screens';
+import { MapPage, FiltersPage } from 'screens';
 
 const BaseStack = createStackNavigator<NavList>();
 
@@ -12,6 +12,11 @@ function RootNavigation() {
         <BaseStack.Screen
           name={StackRoutes.MAP}
           component={MapPage}
+          options={{ header: () => null }}
+        />
+        <BaseStack.Screen
+          name={StackRoutes.FILTER}
+          component={FiltersPage}
           options={{ header: () => null }}
         />
       </BaseStack.Navigator>
