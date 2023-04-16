@@ -1,109 +1,161 @@
-import React from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Colors from 'utils/Colors';
+import { FontAwesome } from '@expo/vector-icons';
+import { genStyles } from '../styles';
 
 type CommentProps = {
   text: string,
 };
 function Comment({ text }: CommentProps) {
   return (
-    <View style={{
-      width: '100%',
-      flexDirection: 'row',
-      paddingVertical: 10,
-      alignItems: 'center',
-    }}>
-      <View style={styles.icon}>
-        <Text style={styles.text}>Thumbs Icon</Text>
+    <View style={comStyle.commentContainer}>
+      <View style={oldStyles.icon}>
+        <Text style={oldStyles.text}>Thumbs Icon</Text>
       </View>
-      <View style={{
-        width: 'auto',
-      }}>
-        <Text style={{
-          right: 0,
-          backgroundColor: '#000000',
-          minWidth: 230,
-        }}>{text}</Text>
-      </View>
+      <Text style={comStyle.commentText}>{text}</Text>
     </View>
   );
 }
 
+type Rating = 'up' | 'down' | 'none';
+
 function InfoPage() {
+  const [rating, setRating] = useState<Rating>('none');
+
+  const onTapUp = () => {
+    if (rating == 'up') setRating('none');
+    else setRating('up');
+  };
+
+  const onTapDown = () => {
+    if (rating == 'down') setRating('none');
+    else setRating('down');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={[styles.headerText, {
-        width: '100%',
-        textAlign: 'center',
-      }]}>
-        Info
-      </Text>
+    <View style={genStyles.container}>
+      <Text style={genStyles.header}>Info</Text>
 
-      <View style={{
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-around',
-      }}>
-        <View style={styles.column}>
-          <View style={styles.icon}>
-            <Text style={styles.text}>Bathroom Icon</Text>
-          </View>
-          <Text style={styles.text}>Bathroom</Text>
-        </View>
-        <View style={styles.column}>
-          <View style={styles.icon}>
-            <Text style={styles.text}>Score Icon</Text>
-          </View>
-          <Text style={styles.text}>Accessibility Score</Text>
-        </View>
+      <View style={genStyles.sectionContainer}>
       </View>
 
-      <View style={{
-        position: 'relative',
-        width: '100%',
-      }}>
-        <Text style={{
-          position: 'absolute',
-          left: 0,
-          right: '50%',
-          textAlign: 'right',
-        }}>Was this bathroom accessible?</Text>
-        <View style={{
-          position: 'absolute',
-          left: '50%',
-          right: 0,
-          flexDirection: 'row',
-        }}>
-          <View style={styles.icon}>
-            <Text style={styles.text}>Thumbs Icon</Text>
-          </View>
-          <View style={styles.icon}>
-            <Text style={styles.text}>Thumbs Icon</Text>
+      <View style={genStyles.sectionContainer}>
+        <View style={styles.accessSubContainer}>
+          <Text style={styles.accessText}>Was this bathroom accessible?</Text>
+
+          <View style={styles.ratingContainer}>
+            <TouchableOpacity
+              onPress={onTapDown}
+              style={[
+                styles.ratingThumb,
+                styles.rateDown,
+              ]}
+            >
+              <FontAwesome name="thumbs-o-down" size={32} color="black" style={{
+                transform: [{ scaleX: -1 }],
+              }} />
+            </TouchableOpacity>
+
+            <View
+              style={{
+                height: '100%',
+                width: 4,
+              }}
+            />
+
+            <TouchableOpacity
+              onPress={onTapUp}
+              style={[
+                styles.ratingThumb,
+                styles.rateUp,
+              ]}
+            >
+              <FontAwesome name="thumbs-o-up" size={32} color="black" />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
 
-      <View style={[styles.row, styles.twoColumns]}>
-        <Text style={styles.text}>Row 3, Column 1</Text>
-        <Text style={styles.text}>Row 3, Column 2</Text>
+      <View style={genStyles.sectionContainer}>
+        <Text style={genStyles.subsectionHeader}>Details</Text>
       </View>
 
-      <View style={[styles.row, styles.commentSectionHeader]}>
-        <Text style={styles.text}> Comments </Text>
-        <Text style={[styles.text, styles.icon]}>Add Comment Icon</Text>
-      </View>
+      <View style={genStyles.sectionContainer}>
+        <View style={styles.commentHeaderContainer}>
+          <Text style={genStyles.subsectionHeader}>Comments</Text>
+          <Text>Add Comment</Text>
+        </View>
 
-      <Comment text='beepboop' />
-      <Comment text='beepboop' />
+        <View style={styles.cardContainer}>
+          <Comment text='Beep' />
+          <Comment text='Boop' />
+          <Comment text='This is a really long comment. See how it looks' />
+          <Comment text='This is an even longer comment. It might spill over into a next line, or possibly even a third.' />
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  accessSubContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  accessText: {
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+  },
+  ratingThumb: {
+    backgroundColor: '#cccccc',
+    padding: 20,
+  },
+  rateUp: {
+    borderTopRightRadius: 1000,
+    borderBottomRightRadius: 1000,
+  },
+  rateDown: {
+    borderTopLeftRadius: 1000,
+    borderBottomLeftRadius: 1000,
+  },
+  commentHeaderContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  cardContainer: {
+    flexDirection: 'column',
+    width: '100%',
+    backgroundColor: Colors.gray,
+    paddingVertical: 10,
+    borderRadius: 24,
+  },
+});
+
+const comStyle = StyleSheet.create({
+  commentContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  commentText: {
+    right: 0,
+    minWidth: 230,
+    flexShrink: 1,
+    fontSize: 14,
+  },
+});
+
+const oldStyles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     paddingHorizontal: '10%',
     paddingTop: '20%',
     width: '100%',
@@ -162,6 +214,5 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
 
 export default InfoPage;
