@@ -1,5 +1,3 @@
-import { IReview } from './reviews';
-
 export interface IBathroom {
   id: string;
   name: string,
@@ -17,5 +15,4 @@ export interface IBathroom {
   changingTable: boolean;
   accessibleDoor: boolean;
   hasMenstrualProducts: boolean;
-  reviews: IReview[];
 }
