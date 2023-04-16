@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, useDisclose, HStack, Actionsheet, Center } from 'native-base';
+import { Text, useDisclose, HStack, VStack, Actionsheet, Center } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +21,11 @@ import AppButton from 'components/AppButton';
 import { StackRoutes } from 'nav/routeTypes';
 import { background } from 'native-base/lib/typescript/theme/styled-system';
 import Colors from 'utils/Colors';
+import {
+  DDPoint,
+  Haversine,
+  UnitOfDistance,
+} from 'haversine-ts';
 
 const MapPage = () => {
   const {
@@ -38,6 +43,7 @@ const MapPage = () => {
     latitude: 43.7348569458618,
     longitude: -72.2519099587406,
   });
+  const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
   useEffect(() => {
     (async () => {
       const { status } = await Location.getForegroundPermissionsAsync();
@@ -71,6 +77,7 @@ const MapPage = () => {
   };
 
   const allBathrooms = useAppSelector((state) => state.bathrooms.all);
+  const [isAddMode, setIsAddMode] = useState<boolean>(false);
 
   return (
     <>
@@ -88,7 +95,7 @@ const MapPage = () => {
         }}
       >
         {
-          Object.keys(allBathrooms)
+          !isAddMode && Object.keys(allBathrooms)
             .map((bathroomId: string, index: number) => {
               return (
                 <Marker
@@ -146,53 +153,118 @@ const MapPage = () => {
 
         }}
       />
-      <AppButton
-        //Filters
-        title=''
-        disabled={false}
-        style={{
-          position: 'absolute',
-          top: '6.5%',
-          right: '5%',
-          backgroundColor: '#00B4C5',
-          borderRadius: 50,
-          height: 70,
-          width: 70,
-        }}
-        onPress={() => {
-          navigation.navigate(StackRoutes.FILTER);
-        }}
-      />
-      <AppButton
-        // Add location
-        title=''
-        disabled={false}
-        style={{
-          position: 'absolute',
-          bottom: '6.5%',
-          right: '5%',
-          backgroundColor: '#00BF7D',
-          borderRadius: 50,
-          height: 70,
-          width: 70,
-        }}
-        onPress={() => {
-
-        }}
-      />
+      {
+        !isAddMode && 
+        <>
+          <AppButton
+            //Filters
+            title=''
+            disabled={false}
+            style={{
+              position: 'absolute',
+              top: '6.5%',
+              right: '5%',
+              backgroundColor: '#00B4C5',
+              borderRadius: 50,
+              height: 70,
+              width: 70,
+            }}
+            onPress={() => {
+              navigation.navigate(StackRoutes.FILTER);
+            }}
+          />
+          <AppButton
+            // Add location
+            title='+'
+            disabled={false}
+            style={{
+              position: 'absolute',
+              bottom: '6.5%',
+              right: '5%',
+              backgroundColor: '#00BF7D',
+              borderRadius: 50,
+              height: 70,
+              width: 70,
+            }}
+            onPress={() => {
+              setIsAddMode(!isAddMode);
+            }}
+          />
+        </>
+      }
+      {
+        isAddMode &&
+        <>
+          <AppButton
+            title='Add Here'
+            disabled={false}
+            style={{
+              position: 'absolute',
+              bottom: '6.5%',
+              left: '5%',
+              backgroundColor: '#00BF7D',
+              borderRadius: 50,
+              height: 70,
+              width: 185,
+            }}
+            onPress={() => {
+              setIsAddMode(!isAddMode);
+            }}
+          />
+          <AppButton
+            title='-'
+            disabled={false}
+            style={{
+              position: 'absolute',
+              bottom: '6.5%',
+              right: '5%',
+              backgroundColor: '#00BF7D',
+              borderRadius: 50,
+              height: 70,
+              width: 70,
+            }}
+            onPress={() => {
+              setIsAddMode(!isAddMode);
+            }}
+          />
+        </>
+      }
       <Actionsheet isOpen={isOpen} onClose={() => {
         dispatch(setSelectedBathroom(''));
         onClose();
       }}>
         <Actionsheet.Content style={styles.actionSheetModal}>
-          <HStack>
-            <Text>
-              a
-            </Text>
-            <Text>
-              b
-            </Text>
-          </HStack>
+          {
+            selectedBathroomId &&
+              <VStack
+                style={{
+                  alignItems: 'center',
+                }}
+              >
+                <Text>
+                  { allBathrooms[selectedBathroomId].name }
+                </Text> 
+                <Text>
+                  { 
+                    (
+                      new Haversine(2).getDistance(
+                        new DDPoint(userPos.latitude, userPos.longitude), 
+                        new DDPoint(allBathrooms[selectedBathroomId]?.location?.coordinates[1], allBathrooms[selectedBathroomId]?.location?.coordinates[0])).toFixed(2)
+                    ) + ' miles away'
+                  }
+                </Text>
+                {
+                  allBathrooms[selectedBathroomId].hasElevatorAccess ? 
+                    <Text>
+                      Is elevator accessible
+                    </Text>
+                    :
+                    <Text>
+                      Not elevator accessible
+                    </Text>
+                }
+              </VStack>
+          }
           <Actionsheet.Item onPress={() => console.log('hi')}>
           </Actionsheet.Item>
         </Actionsheet.Content>
