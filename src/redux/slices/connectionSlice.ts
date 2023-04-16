@@ -4,10 +4,14 @@ import axios from 'axios';
 
 export interface ConnectionState {
   isConnected: boolean // is connected to backend; does not necessarily mean user is logged in
+  latitude: number,
+  longitude: number,
 }
 
 const initialState: ConnectionState = {
   isConnected: false,
+  latitude: 43.7348569458618,
+  longitude: -72.2519099587406,
 };
 
 export const checkConnection = createAsyncThunk(
@@ -28,7 +32,7 @@ export const connectionSlice = createSlice({
   name: 'connection',
   initialState,
   reducers: {
-
+    setLatLng: (state, action) => ({ ...state, latitude: action.payload.latitude, longitude: action.payload.longitude }),
   },
   extraReducers: (builder) => {
     builder.addCase(checkConnection.fulfilled, (state) => {
@@ -39,5 +43,9 @@ export const connectionSlice = createSlice({
     });
   },
 });
+
+export const { setLatLng } =
+connectionSlice.actions;
+
 
 export default connectionSlice.reducer;

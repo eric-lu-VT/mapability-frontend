@@ -14,19 +14,15 @@ import MapView, {
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
-import { googleReverseGeocode } from 'redux/slices/googleSlice';
+import { setLatLng } from 'redux/slices/connectionSlice';
 import AppButton from 'components/AppButton';
 import Colors from 'utils/Colors';
 import {
   DDPoint,
   Haversine,
-  UnitOfDistance,
 } from 'haversine-ts';
-import { SvgCssUri } from 'react-native-svg';
-import VectorSVG from '../../../../assets/Vector.svg';
 import MapMode from './MapMode';
 import AddLocationMode from './AddLocationMode';
-
 
 export type MapPageMode =
   | 'MainMap'
@@ -44,10 +40,8 @@ function MapPage() {
   const mapRef = useRef<MapView>(null);
   const [locationPermissionStatus, setLocationPermissionStatus] =
     useState<PermissionStatus>();
-  const [userPos, setUserPos] = useState({
-    latitude: 43.7348569458618,
-    longitude: -72.2519099587406,
-  });
+  
+  const { latitude, longitude } = useAppSelector((state) => state.connection);
   const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
   useEffect(() => {
     (async () => {
@@ -64,10 +58,10 @@ function MapPage() {
   const getCurrentLocation = async () => {
     Location.getCurrentPositionAsync()
       .then(async ({ coords }) => {
-        setUserPos({
+        dispatch(setLatLng({
           latitude: coords.latitude,
           longitude: coords.longitude,
-        });
+        }));
         await dispatch(getBathroomsByLocationRange({ latitude: coords.latitude, longitude: coords.longitude }));
         mapRef?.current?.animateToRegion({
           latitude: coords.latitude,
@@ -133,7 +127,7 @@ function MapPage() {
         }
         <Marker
           key={'Your Pos'}
-          coordinate={userPos}
+          coordinate={{ latitude, longitude }}
           style={{
             alignItems: 'center',
           }}
@@ -196,7 +190,7 @@ function MapPage() {
                 {
                   (
                     new Haversine(2).getDistance(
-                      new DDPoint(userPos.latitude, userPos.longitude),
+                      new DDPoint(latitude, longitude),
                       new DDPoint(allBathrooms[selectedBathroomId]?.location?.coordinates[1], allBathrooms[selectedBathroomId]?.location?.coordinates[0])).toFixed(2)
                   ) + ' miles away'
                 }

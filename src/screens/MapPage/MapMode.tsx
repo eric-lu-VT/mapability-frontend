@@ -4,12 +4,18 @@ import { StackRoutes } from 'nav/routeTypes';
 import NavType from 'utils/NavType';
 import { MapPageMode } from '.';
 import React from 'react';
+import { googleReverseGeocode } from 'redux/slices/googleSlice';
+import useAppSelector from 'hooks/useAppSelector';
+import useAppDispatch from 'hooks/useAppDispatch';
 
 type MapModeProps = {
   setPageMode: React.Dispatch<React.SetStateAction<MapPageMode>>,
 };
 function MapMode({ setPageMode }: MapModeProps) {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<NavType>();
+  const { latitude, longitude } = useAppSelector((state) => state.connection);
+
   return (
     <>
       <AppButton
@@ -43,6 +49,10 @@ function MapMode({ setPageMode }: MapModeProps) {
           width: 70,
         }}
         onPress={() => {
+          dispatch(googleReverseGeocode({ 
+            latitude,
+            longitude,
+          }));
           setPageMode('AddLocation');
         }}
       />

@@ -5,6 +5,7 @@ import resourcesReducer from './slices/resourcesSlice';
 import usersReducer from './slices/usersSlice';
 import bathroomsReducer from './slices/bathroomsSlice';
 import reviewsReducer from './slices/reviewsSlice';
+import googleReducer from './slices/googleSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     users: usersReducer,
     bathrooms: bathroomsReducer,
     reviews: reviewsReducer,
+    google: googleReducer,
   },
 });
 
