@@ -84,7 +84,7 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
           position: 'absolute',
           bottom: '6.5%',
           right: '5%',
-          backgroundColor: '#00BF7D',
+          backgroundColor: '#ff3333',
           borderRadius: 50,
           height: 70,
           width: 70,
