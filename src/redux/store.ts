@@ -3,6 +3,8 @@ import connectionReducer from './slices/connectionSlice';
 import authReducer from './slices/authSlice';
 import resourcesReducer from './slices/resourcesSlice';
 import usersReducer from './slices/usersSlice';
+import bathroomsReducer from './slices/bathroomsSlice';
+import reviewsReducer from './slices/reviewsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
     auth: authReducer,
     resources: resourcesReducer,
     users: usersReducer,
+    bathrooms: bathroomsReducer,
+    reviews: reviewsReducer,
   },
 });
 

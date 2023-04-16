@@ -1,22 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { SERVER_URL } from '../../utils/constants.js';
 import axios from 'axios';
-import { IReviews } from 'types/reviews.jsx';
+import { IReview } from 'types/reviews';
 
 export interface ReviewState {
   loading: boolean
-  all: Record<string, IReviews>
-  indices: {
-    byValue: Record<number, string> // value => id
-  }
+  all: Record<string, IReview>
 }
 
 const initialState: ReviewState = {
   loading: false,
   all: {},
-  indices: {
-    byValue: {},
-  },
 };
 
 export const getAllReviews = createAsyncThunk(
@@ -24,7 +18,7 @@ export const getAllReviews = createAsyncThunk(
   async (req: unknown, { dispatch }) => {
     dispatch(startReviewLoading());
     return axios
-      .get<IReviews[]>(`${SERVER_URL}reviews/`)
+      .get<IReview[]>(`${SERVER_URL}reviews/`)
       .finally(() => dispatch(stopReviewLoading()))
       .then((response) => {
         return response.data;
@@ -72,7 +66,7 @@ export const getReview = createAsyncThunk(
 
 export const updateReview = createAsyncThunk(
   'reviews/updateReview',
-  async (req: IReviews, { dispatch }) => {
+  async (req: IReview, { dispatch }) => {
     dispatch(startReviewLoading());
     return axios
       .patch(`${SERVER_URL}reviews/${req.id}`, req)
@@ -113,34 +107,29 @@ export const reviewSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getAllReviews.fulfilled, (state, action) => {
-      const reviews: IReviews[] = action.payload as IReviews[];
-      reviews.forEach((review: IReviews) => {
+      const reviews: IReview[] = action.payload as IReview[];
+      reviews.forEach((review: IReview) => {
         state.all[review.id] = review;
-        state.indices.byValue[review.value] = review.id;
       });
     });
     builder.addCase(createReview.fulfilled, (state, action) => {
-      const review: IReviews = action.payload as IReviews;
+      const review: IReview = action.payload as IReview;
       state.all[review.id] = review;
-      state.indices.byValue[review.value] = review.id;
       alert('Created review as: ' + JSON.stringify(action.payload));
     });
     builder.addCase(getReview.fulfilled, (state, action) => {
-      const review: IReviews = action.payload as IReviews;
+      const review: IReview = action.payload as IReview;
       state.all[review.id] = review;
-      state.indices.byValue[review.value] = review.id;
       alert('Retrieved review as: ' + JSON.stringify(action.payload));
     });
     builder.addCase(updateReview.fulfilled, (state, action) => {
-      const review: IReviews = action.payload as IReviews;
+      const review: IReview = action.payload as IReview;
       state.all[review.id] = review;
-      state.indices.byValue[review.value] = review.id;
       alert('Updated review to: ' + JSON.stringify(action.payload));
     });
     builder.addCase(deleteReview.fulfilled, (state, action) => {
-      const review: IReviews = action.payload as IReviews;
+      const review: IReview = action.payload as IReview;
       delete state.all[review.id];
-      delete state.indices.byValue[review.value];
       alert('Deleted review with id ' + review.id);
     });
   },
