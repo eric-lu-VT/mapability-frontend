@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { TextInput, Text, View } from "react-native";
-import { Input, Stack, FormControl, Radio, Checkbox } from "native-base";
-import { Resource } from "screens/AddLocationPage";
-import { ScrollView } from "react-native-gesture-handler";
-import { StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { TextInput, View } from 'react-native';
+import { Text, Input, Stack, FormControl, Radio, Checkbox } from 'native-base';
+import { Resource } from 'screens/AddLocationPage';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
+import useAppSelector from 'hooks/useAppSelector';
+import useAppDispatch from 'hooks/useAppDispatch';
+import AppButton from 'components/AppButton';
 
 type FormProps = {
   resource: Resource;
@@ -11,6 +14,12 @@ type FormProps = {
 };
 
 export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
+  const dispatch = useAppDispatch();
+
+  const handleSubmit = (data) => {
+    
+  };
+
   return (
     <ScrollView>
       <FormControl style={styles.container}>
@@ -18,7 +27,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           <Text style={styles.texty}>Is this location accessible?</Text>
           <Checkbox
             style={styles.check}
-            value="your mom"
+            value=''
             isChecked={resource.isAccessible}
             onChange={() => {
               setResource({
@@ -32,8 +41,8 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         <View style={styles.row}>
           <Text style={styles.texty}>Name: </Text>
           <TextInput
-            style={{width: 300, fontSize: 18}}
-            placeholder="Name"
+            style={{ width: 300, fontSize: 18 }}
+            placeholder='Name'
             maxLength={20}
             value={resource.name}
             onChangeText={(newText) =>
@@ -44,8 +53,8 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         <View style={styles.row}>
           <Text style={styles.texty}>Description: </Text>
           <TextInput
-            style={{width: 250, fontSize: 18}}
-            placeholder="Description"
+            style={{ width: 250, fontSize: 18 }}
+            placeholder='Description'
             maxLength={20}
             value={resource.description}
             onChangeText={(newText) =>
@@ -57,7 +66,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           <Text style={styles.texty}>Gender Neutral? </Text>
           <Checkbox
             style={styles.check}
-            value="your mom"
+            value=''
             isChecked={resource.unisex}
             onChange={() => {
               setResource({ ...resource, unisex: !resource.unisex });
@@ -71,7 +80,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           </Text>
           <Checkbox
             style={styles.check}
-            value="your mummy"
+            value=''
             isChecked={resource.hasElevatorAccess}
             onChange={() => {
               setResource({
@@ -86,7 +95,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           <Text style={styles.texty}>Is this bathroom single use?</Text>
           <Checkbox
             style={styles.check}
-            value="tomara ma"
+            value=''
             isChecked={resource.isSingleUse}
             onChange={() => {
               setResource({ ...resource, isSingleUse: !resource.isSingleUse });
@@ -98,7 +107,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           <Text style={styles.texty}>Is the building ramp accessible?</Text>
           <Checkbox
             style={styles.check}
-            value="aapki ummi"
+            value=''
             isChecked={resource.buildingRampAccess}
             onChange={() => {
               setResource({
@@ -115,7 +124,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           </Text>
           <Checkbox
             style={styles.check}
-            value="teri maa"
+            value=''
             isChecked={resource.changingTable}
             onChange={() => {
               setResource({
@@ -132,7 +141,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           </Text>
           <Checkbox
             style={styles.check}
-            value="your mum"
+            value=''
             isChecked={resource.accessibleDoor}
             onChange={() => {
               setResource({
@@ -149,7 +158,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           </Text>
           <Checkbox
             style={styles.check}
-            value="your mother"
+            value=''
             isChecked={resource.hasMentstrualProducts}
             onChange={() => {
               setResource({
@@ -157,6 +166,12 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
                 hasMentstrualProducts: !resource.hasMentstrualProducts,
               });
             }}
+          />
+          <AppButton
+            onPress={() => handleSubmit(resource)}
+            title={'Add Location'}
+            textColor='white'
+            fullWidth
           />
         </View>
       </FormControl>
@@ -171,8 +186,8 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 10,
     marginTop: 50,
   },
