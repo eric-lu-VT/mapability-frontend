@@ -15,19 +15,31 @@ import MapView, {
   Polyline,
 } from 'react-native-maps';
 import { fonts } from 'utils/constants';
-import { MapStackRoutes } from 'navigation/routeTypes';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
 import { googleReverseGeocode, resetGooglePlace } from 'redux/slices/googleSlice';
 import AppButton from 'components/AppButton';
-import { StackRoutes } from 'nav/routeTypes';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
 import Colors from 'utils/Colors';
 import {
   DDPoint,
   Haversine,
   UnitOfDistance,
 } from 'haversine-ts';
-// import MyIcon from '../../../../assets/Vector.png'
+import { SvgCssUri } from 'react-native-svg';
+import VectorSVG from '../../../../assets/Vector.svg';
+import MapMode from './MapMode';
+import AddLocationMode from './AddLocationMode';
+
+/*
+              dispatch(googleReverseGeocode({ 
+                latitude: userPos.latitude,
+                longitude: userPos.longitude,
+              }));
+*/
+
+export type MapPageMode =
+  | 'MainMap'
+  | 'AddLocation'
+  | 'LocationSelected';
 
 const MapPage = () => {
   const {
@@ -79,7 +91,7 @@ const MapPage = () => {
   };
 
   const allBathrooms = useAppSelector((state) => state.bathrooms.all);
-  const [isAddMode, setIsAddMode] = useState<boolean>(false);
+  const [pageMode, setPageMode] = useState<MapPageMode>('MainMap');
 
   const googleInfo = useAppSelector((state) => state.google);
 
@@ -92,7 +104,7 @@ const MapPage = () => {
         mapType={'standard'}
         showsCompass={true}
         showsScale={true}
-        followsUserLocation = {true}
+        followsUserLocation={true}
         onMapReady={async () => {
           if (locationPermissionStatus === PermissionStatus.GRANTED) {
             await getCurrentLocation();
@@ -100,7 +112,7 @@ const MapPage = () => {
         }}
       >
         {
-          !isAddMode && Object.keys(allBathrooms)
+          pageMode == 'MainMap' && Object.keys(allBathrooms)
             .map((bathroomId: string, index: number) => {
               return (
                 <Marker
@@ -120,10 +132,10 @@ const MapPage = () => {
                   <Text color='white' fontSize={8} fontFamily={fonts.regular}>
                     {allBathrooms[bathroomId].name}
                   </Text>
-                  <Image 
-                    source={require('../../../../assets/Vector.svg')}
+                  <Image
+                    source={require('../../../../assets/Vector.png')}
                     style={{
-                      paddingBottom : 10,
+                      paddingBottom: 10,
                     }}
                   />
                 </Marker>
@@ -139,7 +151,7 @@ const MapPage = () => {
         >
           <Text color='white' fontSize={8} fontFamily={fonts.regular}>
             Your position
-          </Text> 
+          </Text>
           <View
             style={{
               width: 10,
@@ -147,7 +159,9 @@ const MapPage = () => {
               borderRadius: 10 / 2,
               backgroundColor: 'red',
             }}
-          /> 
+          >
+            {/* <VectorSVG style={{ paddingbottom : 10 }}/> */}      
+          </View> 
         </Marker>
       </MapView>
       <AppButton
@@ -167,101 +181,12 @@ const MapPage = () => {
         }}
       />
       {
-        !isAddMode && 
-        <>
-          <AppButton
-            //Filters
-            title={googleInfo.name}
-            disabled={true}
-            style={{
-              position: 'absolute',
-              top: '6.5%',
-              left: 0,
-              right:0,
-              backgroundColor: '#D9D9D9',
-              borderRadius: 50,
-              height: 70,
-              width: 70,
-            }}
-            onPress={() => {}}
-          />
-          <AppButton
-            //Filters
-            title=''
-            disabled={false}
-            style={{
-              position: 'absolute',
-              top: '6.5%',
-              right: '5%',
-              backgroundColor: '#00B4C5',
-              borderRadius: 50,
-              height: 70,
-              width: 70,
-            }}
-            onPress={() => {
-              navigation.navigate(StackRoutes.FILTER);
-            }}
-          />
-          <AppButton
-            // Add location
-            title='+'
-            disabled={false}
-            style={{
-              position: 'absolute',
-              bottom: '6.5%',
-              right: '5%',
-              backgroundColor: '#00BF7D',
-              borderRadius: 50,
-              height: 70,
-              width: 70,
-            }}
-            onPress={() => {
-              dispatch(googleReverseGeocode({ 
-                latitude: userPos.latitude,
-                longitude: userPos.longitude,
-              }));
-              setIsAddMode(!isAddMode);
-            }}
-          />
-        </>
-      }
-      {
-        isAddMode &&
-        <>
-          <AppButton
-            title='Add Here'
-            disabled={false}
-            style={{
-              position: 'absolute',
-              bottom: '6.5%',
-              left: '5%',
-              backgroundColor: '#00BF7D',
-              borderRadius: 50,
-              height: 70,
-              width: 185,
-            }}
-            onPress={() => {
-              setIsAddMode(!isAddMode);
-            }}
-          />
-          <AppButton
-            title='-'
-            disabled={false}
-            style={{
-              position: 'absolute',
-              bottom: '6.5%',
-              right: '5%',
-              backgroundColor: '#00BF7D',
-              borderRadius: 50,
-              height: 70,
-              width: 70,
-            }}
-            onPress={() => {
-              dispatch(resetGooglePlace());
-              setIsAddMode(!isAddMode);
-            }}
-          />
-        </>
+        pageMode == 'MainMap' ?
+          <MapMode setPageMode={setPageMode} />
+          : pageMode == 'AddLocation' ?
+            <AddLocationMode setPageMode={setPageMode} /> :
+            <>
+            </>
       }
       <Actionsheet isOpen={isOpen} onClose={() => {
         dispatch(setSelectedBathroom(''));
@@ -270,34 +195,34 @@ const MapPage = () => {
         <Actionsheet.Content style={styles.actionSheetModal}>
           {
             selectedBathroomId &&
-              <VStack
-                style={{
-                  alignItems: 'center',
-                }}
-              >
-                <Text>
-                  { allBathrooms[selectedBathroomId].name }
-                </Text> 
-                <Text>
-                  { 
-                    (
-                      new Haversine(2).getDistance(
-                        new DDPoint(userPos.latitude, userPos.longitude), 
-                        new DDPoint(allBathrooms[selectedBathroomId]?.location?.coordinates[1], allBathrooms[selectedBathroomId]?.location?.coordinates[0])).toFixed(2)
-                    ) + ' miles away'
-                  }
-                </Text>
+            <VStack
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text>
+                {allBathrooms[selectedBathroomId].name}
+              </Text>
+              <Text>
                 {
-                  allBathrooms[selectedBathroomId].hasElevatorAccess ? 
-                    <Text>
-                      Is elevator accessible
-                    </Text>
-                    :
-                    <Text>
-                      Not elevator accessible
-                    </Text>
+                  (
+                    new Haversine(2).getDistance(
+                      new DDPoint(userPos.latitude, userPos.longitude),
+                      new DDPoint(allBathrooms[selectedBathroomId]?.location?.coordinates[1], allBathrooms[selectedBathroomId]?.location?.coordinates[0])).toFixed(2)
+                  ) + ' miles away'
                 }
-              </VStack>
+              </Text>
+              {
+                allBathrooms[selectedBathroomId].hasElevatorAccess ?
+                  <Text>
+                    Is elevator accessible
+                  </Text>
+                  :
+                  <Text>
+                    Not elevator accessible
+                  </Text>
+              }
+            </VStack>
           }
           <Actionsheet.Item onPress={() => console.log('hi')}>
           </Actionsheet.Item>
