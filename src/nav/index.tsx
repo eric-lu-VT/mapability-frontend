@@ -1,12 +1,22 @@
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavList, StackRoutes } from './routeTypes';
 import { MapPage, FilterPage, InfoPage } from 'screens';
 import AddLocationPage from 'screens/AddLocationPage';
+import useAppSelector from 'hooks/useAppSelector';
+import useAppDispatch from 'hooks/useAppDispatch';
+import { getAllReviews } from 'redux/slices/reviewsSlice';
 
 const BaseStack = createStackNavigator<NavList>();
 
 function RootNavigation() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getAllReviews({}));
+  }, []);
+  
   return (
     <NavigationContainer>
       <BaseStack.Navigator initialRouteName={StackRoutes.MAP}>

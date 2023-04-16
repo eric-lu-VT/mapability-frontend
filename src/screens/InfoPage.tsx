@@ -1,24 +1,22 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, FlatList, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from 'utils/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import { genStyles } from '../styles';
 import { BackButton } from 'components/NavButtons';
-
-type CommentProps = {
-  text: string,
-};
-function Comment({ text }: CommentProps) {
-  return (
-    <View style={comStyle.commentContainer}>
-      <View style={oldStyles.icon}>
-        <Text style={oldStyles.text}>Thumbs Icon</Text>
-      </View>
-      <Text style={comStyle.commentText}>{text}</Text>
-    </View>
-  );
-}
+import useAppSelector from 'hooks/useAppSelector';
+import useAppDispatch from 'hooks/useAppDispatch';
+import { useNavigation } from '@react-navigation/native';
+import NavType from 'utils/NavType';
+import { StackRoutes } from 'nav/routeTypes';
+import { RootStackParamList } from 'utils/NavType';
+import { View, HStack, Text, VStack } from 'native-base';
+import FormatStyle from 'utils/FormatStyle';
+import BaseView from 'components/BaseView';
+import { fonts } from 'utils/constants';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
 
 type Rating = 'up' | 'down' | 'none';
 
@@ -35,73 +33,151 @@ function InfoPage() {
     else setRating('down');
   };
 
+  const allReviews = useAppSelector((state) => state.reviews.all);
+  const allBathrooms = useAppSelector((state) => state.bathrooms.all);
+  const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
+  const filteredReviews = Object.values(allReviews)
+    .filter((review) => review.bathroomId === selectedBathroomId);
+
+  const navigation = useNavigation();
+  const goBack = () => navigation.goBack();
+
   return (
-    <View style={genStyles.container}>
+    <BaseView>
       <View style={{ position: 'absolute', top: 50, left: 20, zIndex: 100 }}>
-        <BackButton />
+        <TouchableHighlight onPress={goBack}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+            <AntDesign name='left' size={15} color='white' />
+            <Text style={{
+              color: 'white',
+              fontFamily: 'Montserrat_400Regular',
+              marginLeft: 3,
+            }}>
+              Back
+            </Text>
+          </View>
+        </TouchableHighlight>
       </View>
-      <ScrollView>
-        <Text style={genStyles.header}>Info</Text>
-
-        <View style={genStyles.sectionContainer}>
-        </View>
-
-        <View style={genStyles.sectionContainer}>
-          <View style={styles.accessSubContainer}>
-            <Text style={styles.accessText}>Was this bathroom accessible?</Text>
-
-            <View style={styles.ratingContainer}>
-              <TouchableOpacity
-                onPress={onTapDown}
-                style={[
-                  styles.ratingThumb,
-                  styles.rateDown,
-                ]}
-              >
-                <FontAwesome name="thumbs-o-down" size={32} color="black" style={{
-                  transform: [{ scaleX: -1 }],
-                }} />
-              </TouchableOpacity>
-
-              <View
-                style={{
-                  height: '100%',
-                  width: 4,
-                }}
-              />
-
-              <TouchableOpacity
-                onPress={onTapUp}
-                style={[
-                  styles.ratingThumb,
-                  styles.rateUp,
-                ]}
-              >
-                <FontAwesome name="thumbs-o-up" size={32} color="black" />
-              </TouchableOpacity>
-            </View>
+      <View
+        style={{
+          height: '80%',
+          width: Dimensions.get('window').width * 0.90,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}
+      >
+        <Text color="white" fontSize={24} fontFamily={fonts.medium}>
+          {allBathrooms[selectedBathroomId].name}
+        </Text>
+        <HStack
+          paddingTop={5}
+        >
+          <View
+            maxW={'50%'}
+            paddingRight={5}
+          >
+            <Text color="white" fontSize={18} fontFamily={fonts.medium}>
+              Was this bathroom accessible?
+            </Text>
           </View>
-        </View>
-
-        <View style={genStyles.sectionContainer}>
-          <Text style={genStyles.subsectionHeader}>Details</Text>
-        </View>
-
-        <View style={genStyles.sectionContainer}>
-          <View style={styles.commentHeaderContainer}>
-            <Text style={genStyles.subsectionHeader}>Comments</Text>
-            <Text>Add Comment</Text>
-          </View>
-
-          <View style={styles.cardContainer}>
-            <Comment text='Beep' />
-            <Comment text='Boop' />
-            <Comment text='This is a really long comment. See how it looks' />
-            <Comment text='This is an even longer comment. It might spill over into a next line, or possibly even a third.' />
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+          <HStack
+            maxW={'50%'}
+            paddingLeft={5}
+          >
+            <TouchableOpacity
+              onPress={onTapDown}
+              style={[
+                styles.ratingThumb,
+                styles.rateDown,
+              ]}
+            >
+              <FontAwesome name="thumbs-o-down" size={16} color="black" style={{
+                transform: [{ scaleX: -1 }],
+              }} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onTapUp}
+              style={[
+                styles.ratingThumb,
+                styles.rateUp,
+              ]}
+            >
+              <FontAwesome name="thumbs-o-up" size={16} color="black" />
+            </TouchableOpacity>
+          </HStack>
+        </HStack>
+        <VStack>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Elevator access? { allBathrooms[selectedBathroomId].hasElevatorAccess ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Grab bars? { allBathrooms[selectedBathroomId].hasGrabBars ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Single use? { allBathrooms[selectedBathroomId].isSingleUse ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Ramp access? { allBathrooms[selectedBathroomId].buildingRampAccess ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Changing table? { allBathrooms[selectedBathroomId].changingTable ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Unisex Stalls? { allBathrooms[selectedBathroomId].unisex ? 'Yes' : 'No' }
+          </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} paddingTop={5}>
+            Menstrual products? { allBathrooms[selectedBathroomId].hasMenstrualProducts ? 'Yes' : 'No' }
+          </Text>
+        </VStack>
+        <Text color="white" fontSize={24} fontFamily={fonts.medium} paddingTop={5}>
+          Reviews
+        </Text>
+        {
+          filteredReviews.length === 0 &&
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
+            No reviews avaiable :(
+          </Text>
+        }
+        <FlatList
+          data={filteredReviews}
+          renderItem={({ item }) => {
+            return (
+              <>
+                <View
+                  style={styles.subContainer}
+                >
+                  {
+                    (item.rating > 0) ?
+                      <FontAwesome name="thumbs-o-up" size={60} color="black" />
+                      :
+                      <FontAwesome name="thumbs-o-down" size={60} color="black" style={{
+                        transform: [{ scaleX: -1 }],
+                      }} />
+                  }
+                  <View
+                    style={styles.subItemR}
+                  >
+                    <Text
+                      style={{
+                        color: Colors.white,
+                      }}
+                    >
+                      {item.comment}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            );
+          }}
+          numColumns={1}
+        />
+      </View>
+    </BaseView>
   );
 }
 
@@ -141,83 +217,25 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 24,
   },
-});
-
-const comStyle = StyleSheet.create({
-  commentContainer: {
+  subContainer: {
+    flex: -1, 
+    flexDirection: 'row', 
+    justifyContent: 'flex-start', 
     width: '100%',
-    flexDirection: 'row',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    alignItems: 'center',
+    padding: 10,
   },
-  commentText: {
-    right: 0,
-    minWidth: 230,
-    flexShrink: 1,
-    fontSize: 14,
+  subItemL: {
+    width: '20%',
   },
-});
-
-const oldStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: '10%',
-    paddingTop: '20%',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    bottom: 0,
+  subItemR: {
+    width: '80%',
+    flexDirecction: 'column',
+    paddingLeft: 25,
   },
-  row: {
-    flexDirection: 'row',
-    marginBottom: '40%',
-  },
-  header: {
-    paddingTop: 40,
-    paddingBottom: 20,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  column: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EEE',
-    height: 80,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-  icon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EEE',
-    height: 80,
-    width: 80,
-    marginRight: 10,
-    borderRadius: 40,
-  },
-  twoColumns: {
-    justifyContent: 'space-between',
-  },
-  text: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  commentSectionHeader: {
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-  commentCard: {
-    width: '100%',
-  },
-  commentText: {
-    flexGrow: 5,
-  },
-  rightJustify: {
-    textAlign: 'right',
+  horizontalLine: {
+    borderBottomColor: Colors.blueBlack,
+    borderBottomWidth: 1,
+    width: Dimensions.get('window').width * 0.90,
   },
 });
 

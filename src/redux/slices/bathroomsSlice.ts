@@ -76,15 +76,7 @@ export const getBathroomsByLocationRange = createAsyncThunk(
       .get(`${SERVER_URL}bathrooms?searchLng=${req.longitude}&searchLat=${req.latitude}&searchRadius=${10}`)
       .then(async (response) => {
         if (response.data != null) {
-          try {
-            await Promise.all(
-              await response.data.forEach(async (bathroom: IBathroom) => {
 
-              }),
-            );
-          } catch (e: any) {
-            // suppress
-          }
         } else {
           console.log('response.data null');
         }
