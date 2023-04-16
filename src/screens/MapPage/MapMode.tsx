@@ -7,6 +7,8 @@ import React from 'react';
 import { googleReverseGeocode } from 'redux/slices/googleSlice';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
+import { IconButton } from 'native-base';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 
 type MapModeProps = {
   setPageMode: React.Dispatch<React.SetStateAction<MapPageMode>>,
@@ -34,10 +36,12 @@ function MapMode({ setPageMode }: MapModeProps) {
         onPress={() => {
           navigation.navigate(StackRoutes.FILTER);
         }}
-      />
+      >
+        <Ionicons name='filter-sharp' size={30} color='black' style={{ paddingTop: 5 }}/>
+      </AppButton>
       <AppButton
         // Add location
-        title='+'
+        title=''
         disabled={false}
         style={{
           position: 'absolute',
@@ -55,7 +59,9 @@ function MapMode({ setPageMode }: MapModeProps) {
           }));
           setPageMode('AddLocation');
         }}
-      />
+      >
+        <Entypo name='plus' size={30} color='black' style={{ paddingTop: 5 }}/>
+      </AppButton>
     </>
   );
 }
