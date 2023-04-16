@@ -8,7 +8,8 @@ import { googleReverseGeocode } from 'redux/slices/googleSlice';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import { IconButton } from 'native-base';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { Ionicons, Entypo, AntDesign } from '@expo/vector-icons';
+import { setTempLatLng } from 'redux/slices/connectionSlice';
 
 type MapModeProps = {
   setPageMode: React.Dispatch<React.SetStateAction<MapPageMode>>,
@@ -69,6 +70,30 @@ function MapMode({ setPageMode }: MapModeProps) {
         }}
       >
         <Entypo name='plus' size={30} color='black' style={{ paddingTop: 5 }}/>
+      </AppButton>
+      <AppButton
+        //Filters
+        title=''
+        disabled={false}
+        style={{
+          position: 'absolute',
+          bottom: '6.5%',
+          left: '5%',
+          backgroundColor: '#2546F0',
+          borderRadius: 50,
+          height: 70,
+          width: 70,
+          shadowColor: '#171717',
+          shadowOffset: { width: -2, height: 4 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+        }}
+        onPress={() => {
+          dispatch(setTempLatLng({ tempLatitude: latitude, tempLongitude: longitude }));
+          setPageMode('Search');
+        }}
+      >
+        <AntDesign name='search1' size={30} color='black' style={{ paddingTop: 5 }}/>
       </AppButton>
     </>
   );

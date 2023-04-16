@@ -22,6 +22,7 @@ function Comment({ text }: CommentProps) {
         <Text style={{
           right: 0,
           backgroundColor: '#000000',
+          minWidth: 230,
         }}>{text}</Text>
       </View>
     </View>
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: '40%',
   },
   header: {
     paddingTop: 40,
