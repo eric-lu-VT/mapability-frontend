@@ -17,6 +17,7 @@ import MapView, {
 import { fonts } from 'utils/constants';
 import { MapStackRoutes } from 'navigation/routeTypes';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
+import { googleReverseGeocode } from 'redux/slices/googleSlice';
 import AppButton from 'components/AppButton';
 import { StackRoutes } from 'nav/routeTypes';
 import { background } from 'native-base/lib/typescript/theme/styled-system';
@@ -94,9 +95,7 @@ const MapPage = () => {
           if (locationPermissionStatus === PermissionStatus.GRANTED) {
             await getCurrentLocation();
           }
-        }
-        
-      }
+        }}
       >
         {
           !isAddMode && Object.keys(allBathrooms)
@@ -122,7 +121,7 @@ const MapPage = () => {
                   <Image 
                     source={require('../../../../assets/Vector.svg')}
                     style={{
-                      paddingBottom : 10
+                      paddingBottom : 10,
                     }}
                   />
                 </Marker>
@@ -199,6 +198,10 @@ const MapPage = () => {
               width: 70,
             }}
             onPress={() => {
+              dispatch(googleReverseGeocode({ 
+                latitude: userPos.latitude,
+                longitude: userPos.longitude,
+              }));
               setIsAddMode(!isAddMode);
             }}
           />
