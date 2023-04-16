@@ -1,31 +1,9 @@
-import {
-  SignInPage,
-  SignUpPage,
-  VerifyPage,
-} from './AuthScreens';
+import MapPage from './MapPage';
+import AddLocationPage from './AddLocationPage';
+import FilterPage from './FilterPage';
 
-import { 
-  FrontPage,
-  ForbiddenPage,
-} from './BaseScreens';
-
-import {
-  MapPage, FiltersPage, InfoPage,
-} from './MapStackScreens';
-
-
-import {
-  ProfilePage,
-} from './ProfileStackScreens';
-
-export { 
-  SignInPage,
-  SignUpPage,
-  VerifyPage,
-  FrontPage,
-  ForbiddenPage,
+export {
   MapPage,
-  FiltersPage,
-  ProfilePage,
-  InfoPage,
+  AddLocationPage,
+  FilterPage,
 };

@@ -3,8 +3,6 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Text, useDisclose, HStack, VStack, Actionsheet, Center } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
-import { useNavigation } from '@react-navigation/native';
-import NavType from 'utils/NavType';
 import * as Location from 'expo-location';
 import { PermissionStatus } from 'expo-modules-core';
 import MapView, {
@@ -35,7 +33,7 @@ export type MapPageMode =
   | 'AddLocation'
   | 'LocationSelected';
 
-const MapPage = () => {
+function MapPage() {
   const {
     isOpen,
     onOpen,
@@ -43,7 +41,6 @@ const MapPage = () => {
   } = useDisclose();
 
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NavType>();
   const mapRef = useRef<MapView>(null);
   const [locationPermissionStatus, setLocationPermissionStatus] =
     useState<PermissionStatus>();
@@ -152,8 +149,8 @@ const MapPage = () => {
               backgroundColor: 'red',
             }}
           >
-                  
-          </View> 
+
+          </View>
         </Marker>
       </MapView>
       <AppButton
@@ -222,7 +219,7 @@ const MapPage = () => {
       </Actionsheet>
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   map: {
