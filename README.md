@@ -80,4 +80,4 @@ ESLint is set up in this project. To keep code clean, always remember to run `ya
 * Eric Lu '25
 * Aneesh Patnaik '25
 * Sonia Bendre '25
-* Rishav Chakravarty
+* Rishav Chakravarty '25
