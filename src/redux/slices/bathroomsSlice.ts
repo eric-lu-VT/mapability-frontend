@@ -146,7 +146,7 @@ export const bathroomSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllBathrooms.fulfilled, (state, action) => {
       const bathrooms: IBathroom[] = action.payload as IBathroom[];
-      bathrooms.forEach((bathroom: IBathroom) => {
+      bathrooms?.forEach((bathroom: IBathroom) => {
         state.all[bathroom.id] = bathroom;
       });
     });
@@ -162,7 +162,7 @@ export const bathroomSlice = createSlice({
     });
     builder.addCase(getBathroomsByLocationRange.fulfilled, (state, action) => {
       const bathrooms: IBathroom[] = action.payload as IBathroom[];
-      bathrooms.forEach((bathroom: IBathroom) => {
+      bathrooms?.forEach((bathroom: IBathroom) => {
         state.all[bathroom.id] = bathroom;
       });
     });
