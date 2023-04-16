@@ -12,6 +12,7 @@ import SearchBar from 'components/SearchBar';
 import { setLatLng, setTempLatLng } from 'redux/slices/connectionSlice';
 import { googleTextSearchLocation, resetGooglePlace  } from 'redux/slices/googleSlice';
 import MapView from 'react-native-maps';
+import { resetBathroomState, getBathroomsByLocationRange } from 'redux/slices/bathroomsSlice'; 
 
 type SearchModeProps = {
   setPageMode: React.Dispatch<React.SetStateAction<MapPageMode>>,
@@ -92,9 +93,11 @@ function SearchMode({ setPageMode, mapRef }: SearchModeProps) {
           shadowOpacity: 0.2,
           shadowRadius: 3,
         }}
-        onPress={() => {
+        onPress={async () => {
           dispatch(setLatLng({ latitude: tempLatitude, longitude: tempLongitude }));
           dispatch(resetGooglePlace());
+          dispatch(resetBathroomState());
+          await dispatch(getBathroomsByLocationRange({ latitude: tempLatitude, longitude: tempLongitude }));
           setPageMode('MainMap');
         }}
       >
