@@ -1,68 +1,190 @@
-import React, { useState } from 'react';
-import { Input, Stack, FormControl, Radio, Checkbox } from 'native-base';
+import React, { useState } from "react";
+import { TextInput, Text, View } from "react-native";
+import { Input, Stack, FormControl, Radio, Checkbox } from "native-base";
+import { Resource } from "screens/AddLocationPage";
+import { ScrollView } from "react-native-gesture-handler";
+import { StyleSheet } from "react-native";
 
-interface FormProps {
-  inputs: {
-    label: string;
-    placeholder: string;
-    name: string;
-  }[];
-  radio?: {
-    label: string;
-    name: string;
-    options: { label: string; value: string }[];
-  };
-  checkbox?: {
-    label: string;
-    name: string;
-  };
-}
+type FormProps = {
+  resource: Resource;
+  setResource: React.Dispatch<React.SetStateAction<Resource>>;
+};
 
-export const Form: React.FC<FormProps> = ({ inputs, radio, checkbox }) => {
-  const [radioValue, setRadioValue] = useState('');
-  const [checkboxValue, setCheckboxValue] = useState(false);
-
-  const handleRadioChange = (value: string) => {
-    setRadioValue(value);
-  };
-
-  const handleCheckboxChange = (value: boolean) => {
-    setCheckboxValue(value);
-  };
-
+export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
   return (
-    <FormControl>
-      <Stack space={5}>
-        {inputs.map((input) => (
-          <Stack key={input.name}>
-            <FormControl.Label>{input.label}</FormControl.Label>
-            <Input variant="underlined" p={2} placeholder={input.placeholder} name={input.name} />
-          </Stack>
-        ))}
-        {radio && (
-          <Stack>
-            <FormControl.Label>{radio.label}</FormControl.Label>
-            <Stack direction="row" space={5}>
-              <Radio.Group name={radio.name} value={radioValue} onChange={handleRadioChange}>
-                {radio.options.map((option) => (
-                  <Radio key={option.value} value={option.value}>
-                    {option.label}
-                  </Radio>
-                ))}
-              </Radio.Group>
-            </Stack>
-          </Stack>
-        )}
-        {checkbox && (
-          <Stack>
-            <FormControl.Label>{checkbox.label}</FormControl.Label>
-            <Stack direction="row" space={5}>
-              <Checkbox value={checkboxValue} onChange={handleCheckboxChange} name={checkbox.name} />
-              <FormControl.HelperText>{checkbox.label}</FormControl.HelperText>
-            </Stack>
-          </Stack>
-        )}
-      </Stack>
-    </FormControl>
+    <ScrollView>
+      <FormControl style={styles.container}>
+        <View style={styles.row}>
+          <Text style={styles.texty}>Is this location accessible?</Text>
+          <Checkbox
+            style={styles.check}
+            value="your mom"
+            isChecked={resource.isAccessible}
+            onChange={() => {
+              setResource({
+                ...resource,
+                isAccessible: !resource.isAccessible,
+              });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>Name: </Text>
+          <TextInput
+            style={{width: 300, fontSize: 18}}
+            placeholder="Name"
+            maxLength={20}
+            value={resource.name}
+            onChangeText={(newText) =>
+              setResource({ ...resource, name: newText })
+            }
+          />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.texty}>Description: </Text>
+          <TextInput
+            style={{width: 250, fontSize: 18}}
+            placeholder="Description"
+            maxLength={20}
+            value={resource.description}
+            onChangeText={(newText) =>
+              setResource({ ...resource, description: newText })
+            }
+          />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.texty}>Gender Neutral? </Text>
+          <Checkbox
+            style={styles.check}
+            value="your mom"
+            isChecked={resource.unisex}
+            onChange={() => {
+              setResource({ ...resource, unisex: !resource.unisex });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>
+            Is this location elevator accessible?
+          </Text>
+          <Checkbox
+            style={styles.check}
+            value="your mummy"
+            isChecked={resource.hasElevatorAccess}
+            onChange={() => {
+              setResource({
+                ...resource,
+                hasElevatorAccess: !resource.hasElevatorAccess,
+              });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>Is this bathroom single use?</Text>
+          <Checkbox
+            style={styles.check}
+            value="tomara ma"
+            isChecked={resource.isSingleUse}
+            onChange={() => {
+              setResource({ ...resource, isSingleUse: !resource.isSingleUse });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>Is the building ramp accessible?</Text>
+          <Checkbox
+            style={styles.check}
+            value="aapki ummi"
+            isChecked={resource.buildingRampAccess}
+            onChange={() => {
+              setResource({
+                ...resource,
+                buildingRampAccess: !resource.buildingRampAccess,
+              });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>
+            Does this bathroom have a changing table?
+          </Text>
+          <Checkbox
+            style={styles.check}
+            value="teri maa"
+            isChecked={resource.changingTable}
+            onChange={() => {
+              setResource({
+                ...resource,
+                changingTable: !resource.changingTable,
+              });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>
+            Does this bathroom have an accessible door?
+          </Text>
+          <Checkbox
+            style={styles.check}
+            value="your mum"
+            isChecked={resource.accessibleDoor}
+            onChange={() => {
+              setResource({
+                ...resource,
+                accessibleDoor: !resource.accessibleDoor,
+              });
+            }}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.texty}>
+            Does this bathroom have menstrual products?
+          </Text>
+          <Checkbox
+            style={styles.check}
+            value="your mother"
+            isChecked={resource.hasMentstrualProducts}
+            onChange={() => {
+              setResource({
+                ...resource,
+                hasMentstrualProducts: !resource.hasMentstrualProducts,
+              });
+            }}
+          />
+        </View>
+      </FormControl>
+    </ScrollView>
   );
 };
+
+export default Form;
+
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 100,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    marginTop: 50,
+  },
+  texty: {
+    fontSize: 18,
+    maxWidth: 300,
+  },
+  check: {
+    width: 30,
+    height: 30,
+  },
+  inputs: {
+    width: 250,
+  },
+});
