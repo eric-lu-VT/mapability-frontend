@@ -11,7 +11,7 @@ const BackButton = ({ onPress }: { onPress?: () => void }) => {
   return (
     <TouchableHighlight onPress={onPress || goBack}>
       <View style={styles.back}>
-        <AntDesign name='left' size={15} color='white' /><Text style={styles.backText}>Back</Text>
+        <AntDesign name='left' size={15} color='black' /><Text style={styles.backText}>Back</Text>
       </View>
     </TouchableHighlight>
   );
@@ -19,7 +19,7 @@ const BackButton = ({ onPress }: { onPress?: () => void }) => {
 
 const styles = StyleSheet.create({
   backText: {
-    color: 'white',
+    color: 'black',
     fontFamily: 'Montserrat_400Regular',
     marginLeft: 3,
   },

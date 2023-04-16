@@ -4,14 +4,13 @@ import { MapPageMode } from '.';
 import { StackRoutes } from 'nav/routeTypes';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
-import { resetGooglePlace } from 'redux/slices/googleSlice';
 import { View, Text } from 'native-base';
 import TextStyles from '../../utils/TextStyles';
 import { fonts } from '../../utils/constants';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import SearchBar from 'components/SearchBar';
 import { setLatLng, setTempLatLng } from 'redux/slices/connectionSlice';
-import { googleTextSearchLocation } from 'redux/slices/googleSlice';
+import { googleTextSearchLocation, resetGooglePlace  } from 'redux/slices/googleSlice';
 import MapView from 'react-native-maps';
 
 type SearchModeProps = {
@@ -71,6 +70,7 @@ function SearchMode({ setPageMode, mapRef }: SearchModeProps) {
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           });
+          dispatch(resetGooglePlace());
           setPageMode('MainMap');
         }}
       >
@@ -94,6 +94,7 @@ function SearchMode({ setPageMode, mapRef }: SearchModeProps) {
         }}
         onPress={() => {
           dispatch(setLatLng({ latitude: tempLatitude, longitude: tempLongitude }));
+          dispatch(resetGooglePlace());
           setPageMode('MainMap');
         }}
       >
