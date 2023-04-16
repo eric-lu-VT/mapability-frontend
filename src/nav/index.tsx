@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavList, StackRoutes } from './routeTypes';
 import { MapPage, FiltersPage, InfoPage } from 'screens';
+import AddLocationPage from 'screens/AddLocationPage';
 
 const BaseStack = createStackNavigator<NavList>();
 
@@ -22,6 +23,11 @@ function RootNavigation() {
         <BaseStack.Screen
           name={StackRoutes.MORE_INFO}
           component={InfoPage}
+          options={{ header: () => null }}
+        />
+        <BaseStack.Screen
+          name={StackRoutes.ADD_LOC}
+          component={AddLocationPage}
           options={{ header: () => null }}
         />
       </BaseStack.Navigator>
