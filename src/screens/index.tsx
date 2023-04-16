@@ -14,9 +14,8 @@ import {
 } from './MapStackScreens';
 
 import {
-  UsersPage,
-  ResourcesPage,
-} from './ResourceStackScreens';
+  ProfilePage,
+} from './ProfileStackScreens';
 
 export { 
   SignInPage,
@@ -25,6 +24,5 @@ export {
   FrontPage,
   ForbiddenPage,
   MapPage,
-  UsersPage,
-  ResourcesPage,
+  ProfilePage,
 };
