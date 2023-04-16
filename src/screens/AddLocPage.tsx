@@ -1,8 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
+import AccessibilityRating from 'components/AccessibilityRating';
 import AppButton from 'components/AppButton';
 import { Checkbox } from 'native-base';
+import { StackRoutes } from 'nav/routeTypes';
 import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { genStyles } from 'styles';
+import NavType from 'utils/NavType';
 
 const ResourceTypes = ['Bathroom', 'Parking Lot', 'Elevator', 'Ramp'];
 type ResourceType = 'bathroom' | 'parking' | 'elevator' | 'ramp';
@@ -68,6 +72,12 @@ function AddLocPage() {
 
   const selectResource = (item: ResourceType) => setSelectResource(item);
 
+  const navigation = useNavigation<NavType>();
+
+  const handleSubmit = () => {
+    navigation.navigate(StackRoutes.MAP);
+  };
+
   return <ScrollView style={genStyles.container}>
     <Text style={genStyles.header}>Add Location</Text>
     <ScrollView
@@ -81,6 +91,18 @@ function AddLocPage() {
       }
     </ScrollView>
 
+    <View
+      style={{
+        width: '100%',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        marginTop: 24,
+        marginBottom: 12,
+      }}
+    >
+      <AccessibilityRating />
+    </View>
+
     <FormRow text='Gender neutral?' val={isUnisex} setVal={setUnisex} />
     <FormRow text='Elevator accessible?' val={hasElevator} setVal={setHasElevator} />
     <FormRow text='Has grab bars?' val={hasGrabBars} setVal={setHasGrabBars} />
@@ -89,6 +111,13 @@ function AddLocPage() {
     <FormRow text='Changing table?' val={hasChangingTable} setVal={setHasChangingTable} />
     <FormRow text='Accessible door?' val={hasDoor} setVal={setHasDoor} />
     <FormRow text='Has menstrual products?' val={hasMenstrual} setVal={setHasMenstrual} />
+
+    <AppButton
+      onPress={() => handleSubmit()}
+      title={'Add Location'}
+      textColor='black'
+      fullWidth
+    />
   </ScrollView>;
 }
 
