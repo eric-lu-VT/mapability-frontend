@@ -237,25 +237,15 @@ function MapPage() {
                   ) + ' miles away'
                 }
               </Text>
-              {
-                allBathrooms[selectedBathroomId].hasElevatorAccess ?
-                  <Text>
-                    Is elevator accessible
-                  </Text>
-                  :
-                  <Text>
-                    Not elevator accessible
-                  </Text>
-              }
             </VStack>
           }
           <Actionsheet.Item 
             style={{ alignItems: 'center' }} 
             onPress={() => { 
               onClose();
-              navigation.navigate(StackRoutes.MORE_INFO); 
+              navigation.navigate(StackRoutes.MORE_INFO, { selectedBathroomId }); 
             }}>
-            <Text style={{ color: Colors.primary, fontFamily: fonts.semiBold, fontSize: 16 }}>See Info</Text>
+            <Text style={{ color: '#00B4C5', fontFamily: fonts.semiBold, fontSize: 16 }}>See Info</Text>
           </Actionsheet.Item>
         </Actionsheet.Content>
       </Actionsheet>
@@ -271,7 +261,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionSheetModal: {
-    minHeight: 200,
+    minHeight: 150,
   },
 });
 
