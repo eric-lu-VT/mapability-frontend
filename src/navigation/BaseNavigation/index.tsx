@@ -8,14 +8,13 @@ import {
   FrontPage,
   ForbiddenPage,
   MapPage,
-  ResourcesPage,
-  UsersPage,
+  ProfilePage,
 } from 'screens';
 import { 
   BaseTabRoutes, 
   FrontStackRoutes,
   MapStackRoutes,
-  ResourceStackRoutes,
+  ProfileStackRoutes,
   BaseNavigationList,
 } from '../routeTypes';
 import { HStack } from 'native-base';
@@ -55,17 +54,12 @@ const MapNavigator = () => {
   );
 };
 
-const ResourceNavigator = () => {
+const ProfileNavigator = () => {
   return (
-    <BaseStack.Navigator initialRouteName={ResourceStackRoutes.VIEW_RESOURCES}>
+    <BaseStack.Navigator initialRouteName={ProfileStackRoutes.PROFILE_PAGE}>
       <BaseStack.Screen
-        name={ResourceStackRoutes.VIEW_RESOURCES}
-        component={ResourcesPage}
-        options={{ header: () => null }}
-      />
-      <BaseStack.Screen
-        name={ResourceStackRoutes.VIEW_USERS}
-        component={UsersPage}
+        name={ProfileStackRoutes.PROFILE_PAGE}
+        component={ProfilePage}
         options={{ header: () => null }}
       />
     </BaseStack.Navigator>
@@ -115,10 +109,10 @@ const BaseNavigation = () => {
           options={{ tabBarIcon: () => <RingsIcon /> }}
         />
         <BaseTab.Screen
-          name={BaseTabRoutes.VIEW_RESOURCES_NAV}
+          name={BaseTabRoutes.PROFILE_NAV}
           component={
             ProtectedRoute([UserScopes.User, UserScopes.Admin])
-              ? ResourceNavigator
+              ? ProfileNavigator
               : ForbiddenPage
           }
           options={{ tabBarIcon: () => (

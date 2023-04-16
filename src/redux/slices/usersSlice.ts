@@ -49,7 +49,7 @@ export const getUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   'users/updateUser',
-  async (req: { id: string, email: string, password: string, role: UserScopes }, { dispatch }) => {
+  async (req: { id: string, email?: string, name?: string, password?: string, role?: UserScopes }, { dispatch }) => {
     dispatch(startUsersLoading());
     return axios
       .patch(`${SERVER_URL}users/${req.id}`, req)
