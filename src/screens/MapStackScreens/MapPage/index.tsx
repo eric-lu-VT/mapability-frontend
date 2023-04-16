@@ -26,6 +26,8 @@ import {
 } from 'haversine-ts';
 import { SvgCssUri } from 'react-native-svg';
 import VectorSVG from '../../../../assets/Vector.svg';
+import MapMode from './MapMode';
+import AddLocationMode from './AddLocationMode';
 
 
 export type MapPageMode =
