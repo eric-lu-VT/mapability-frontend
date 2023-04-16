@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from 'utils/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import { genStyles } from '../styles';
+import { BackButton } from 'components/NavButtons';
 
 type CommentProps = {
   text: string,
@@ -36,65 +37,70 @@ function InfoPage() {
 
   return (
     <View style={genStyles.container}>
-      <Text style={genStyles.header}>Info</Text>
-
-      <View style={genStyles.sectionContainer}>
+      <View style={{ position: 'absolute', top: 50, left: 20, zIndex: 100 }}>
+        <BackButton />
       </View>
+      <ScrollView>
+        <Text style={genStyles.header}>Info</Text>
 
-      <View style={genStyles.sectionContainer}>
-        <View style={styles.accessSubContainer}>
-          <Text style={styles.accessText}>Was this bathroom accessible?</Text>
+        <View style={genStyles.sectionContainer}>
+        </View>
 
-          <View style={styles.ratingContainer}>
-            <TouchableOpacity
-              onPress={onTapDown}
-              style={[
-                styles.ratingThumb,
-                styles.rateDown,
-              ]}
-            >
-              <FontAwesome name="thumbs-o-down" size={32} color="black" style={{
-                transform: [{ scaleX: -1 }],
-              }} />
-            </TouchableOpacity>
+        <View style={genStyles.sectionContainer}>
+          <View style={styles.accessSubContainer}>
+            <Text style={styles.accessText}>Was this bathroom accessible?</Text>
 
-            <View
-              style={{
-                height: '100%',
-                width: 4,
-              }}
-            />
+            <View style={styles.ratingContainer}>
+              <TouchableOpacity
+                onPress={onTapDown}
+                style={[
+                  styles.ratingThumb,
+                  styles.rateDown,
+                ]}
+              >
+                <FontAwesome name="thumbs-o-down" size={32} color="black" style={{
+                  transform: [{ scaleX: -1 }],
+                }} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={onTapUp}
-              style={[
-                styles.ratingThumb,
-                styles.rateUp,
-              ]}
-            >
-              <FontAwesome name="thumbs-o-up" size={32} color="black" />
-            </TouchableOpacity>
+              <View
+                style={{
+                  height: '100%',
+                  width: 4,
+                }}
+              />
+
+              <TouchableOpacity
+                onPress={onTapUp}
+                style={[
+                  styles.ratingThumb,
+                  styles.rateUp,
+                ]}
+              >
+                <FontAwesome name="thumbs-o-up" size={32} color="black" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={genStyles.sectionContainer}>
-        <Text style={genStyles.subsectionHeader}>Details</Text>
-      </View>
-
-      <View style={genStyles.sectionContainer}>
-        <View style={styles.commentHeaderContainer}>
-          <Text style={genStyles.subsectionHeader}>Comments</Text>
-          <Text>Add Comment</Text>
+        <View style={genStyles.sectionContainer}>
+          <Text style={genStyles.subsectionHeader}>Details</Text>
         </View>
 
-        <View style={styles.cardContainer}>
-          <Comment text='Beep' />
-          <Comment text='Boop' />
-          <Comment text='This is a really long comment. See how it looks' />
-          <Comment text='This is an even longer comment. It might spill over into a next line, or possibly even a third.' />
+        <View style={genStyles.sectionContainer}>
+          <View style={styles.commentHeaderContainer}>
+            <Text style={genStyles.subsectionHeader}>Comments</Text>
+            <Text>Add Comment</Text>
+          </View>
+
+          <View style={styles.cardContainer}>
+            <Comment text='Beep' />
+            <Comment text='Boop' />
+            <Comment text='This is a really long comment. See how it looks' />
+            <Comment text='This is an even longer comment. It might spill over into a next line, or possibly even a third.' />
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }

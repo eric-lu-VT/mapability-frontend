@@ -1,43 +1,36 @@
 import React, { useState } from 'react';
 import { TextInput, View } from 'react-native';
 import { Text, Input, Stack, FormControl, Radio, Checkbox } from 'native-base';
-import { Resource } from 'screens/AddLocationPage';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
 import AppButton from 'components/AppButton';
+import { IBathroom } from 'types/bathrooms';
+import { createBathroom } from 'redux/slices/bathroomsSlice';
 
 type FormProps = {
-  resource: Resource;
-  setResource: React.Dispatch<React.SetStateAction<Resource>>;
+  resource: Omit<IBathroom, 'id' | 'location'>;
+  setResource: React.Dispatch<React.SetStateAction<Omit<IBathroom, 'id' | 'location'>>>;
 };
 
 export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
   const dispatch = useAppDispatch();
+  const { latitude, longitude } = useAppSelector((state) => state.connection);
 
-  const handleSubmit = (data) => {
-    
+  const handleSubmit = () => {
+    dispatch(createBathroom({
+      ...resource,
+      location: {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+      },
+    }));
   };
 
   return (
     <ScrollView>
       <FormControl style={styles.container}>
-        <View style={styles.row}>
-          <Text style={styles.texty}>Is this location accessible?</Text>
-          <Checkbox
-            style={styles.check}
-            value=''
-            isChecked={resource.isAccessible}
-            onChange={() => {
-              setResource({
-                ...resource,
-                isAccessible: !resource.isAccessible,
-              });
-            }}
-          />
-        </View>
-
         <View style={styles.row}>
           <Text style={styles.texty}>Name: </Text>
           <TextInput
@@ -159,21 +152,21 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           <Checkbox
             style={styles.check}
             value=''
-            isChecked={resource.hasMentstrualProducts}
+            isChecked={resource.hasMenstrualProducts}
             onChange={() => {
               setResource({
                 ...resource,
-                hasMentstrualProducts: !resource.hasMentstrualProducts,
+                hasMenstrualProducts: !resource.hasMenstrualProducts,
               });
             }}
           />
-          <AppButton
-            onPress={() => handleSubmit(resource)}
-            title={'Add Location'}
-            textColor='white'
-            fullWidth
-          />
         </View>
+        <AppButton
+          onPress={() => handleSubmit()}
+          title={'Add Location'}
+          textColor='black'
+          fullWidth
+        />
       </FormControl>
     </ScrollView>
   );
