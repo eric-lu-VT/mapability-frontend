@@ -47,7 +47,7 @@ const AddLocationPage = () => {
 
   const navigation = useNavigation<NavType>();
   return (
-    <View style={[FormatStyle.container]}>
+    <View style={genStyles.container}>
       <View style={{ position: 'absolute', top: 50, left: 20, zIndex: 100 }}>
         <BackButton />
       </View>
