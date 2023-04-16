@@ -3,7 +3,7 @@ import { SERVER_URL } from '../../utils/constants.js';
 import axios from 'axios';
 import { IBathroom } from 'types/bathrooms';
 import { IReview } from 'types/reviews';
-import { getReview } from './reviewsSlice.js';
+import { getReview } from './reviewsSlice';
 
 export interface BathroomState {
   loading: boolean
@@ -156,6 +156,12 @@ export const bathroomSlice = createSlice({
       const bathroom: IBathroom = action.payload as IBathroom;
       state.all[bathroom.id] = bathroom;
       alert('Retrieved bathroom as: ' + JSON.stringify(action.payload));
+    });
+    builder.addCase(getBathroomsByLocationRange.fulfilled, (state, action) => {
+      const bathrooms: IBathroom[] = action.payload as IBathroom[];
+      bathrooms.forEach((bathroom: IBathroom) => {
+        state.all[bathroom.id] = bathroom;
+      });
     });
     builder.addCase(updateBathroom.fulfilled, (state, action) => {
       const bathroom: IBathroom = action.payload as IBathroom;
