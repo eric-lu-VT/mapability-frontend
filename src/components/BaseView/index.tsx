@@ -27,7 +27,7 @@ const BaseView = ({
 
   return (
     <View style={[FormatStyle.container, style]}>
-      <LinearGradient colors={['#00BF7D', '#00B4C5', '#0073E6', '#2546F0']} style={styles.imageBackground}>
+      <LinearGradient colors={['#00B4C5', '#0073E6']} style={styles.imageBackground}>
         {showTopRightIcon && (
           <Pressable style={{ position: 'absolute', top: 60, right: 20, zIndex: 200 }} onPress={onOpen}>
             <Ionicons name="ellipsis-vertical-outline" size={20} color="white" />

@@ -38,6 +38,7 @@ export const createBathroom = createAsyncThunk(
   'bathrooms/createBathroom',
   async (req: Omit<IBathroom, 'id'>, { dispatch }) => {
     dispatch(startBathroomLoading());
+    console.log(req);
     return axios
       .post(`${SERVER_URL}bathrooms/`, req)
       .finally(() => dispatch(stopBathroomLoading()))
@@ -132,6 +133,7 @@ export const bathroomSlice = createSlice({
     startBathroomLoading: (state) => ({ ...state, loading: true }),
     stopBathroomLoading: (state) => ({ ...state, loading: false }),
     setSelectedBathroom: (state, action) => ({ ...state, selectedBathroomId: action.payload }),
+    resetBathroomState: () => ({ ...initialState }),
   },
   extraReducers: (builder) => {
     builder.addCase(getAllBathrooms.fulfilled, (state, action) => {
@@ -169,7 +171,7 @@ export const bathroomSlice = createSlice({
   },
 });
 
-export const { startBathroomLoading, stopBathroomLoading, setSelectedBathroom } =
+export const { startBathroomLoading, stopBathroomLoading, setSelectedBathroom, resetBathroomState } =
   bathroomSlice.actions;
 
 export default bathroomSlice.reducer;

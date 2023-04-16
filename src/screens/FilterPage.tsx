@@ -3,9 +3,15 @@ import AppButton from 'components/AppButton';
 import useAppDispatch from 'hooks/useAppDispatch';
 import useAppSelector from 'hooks/useAppSelector';
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, TextInput, Dimensions } from 'react-native';
 import { FilterState, setFilter } from 'redux/slices/filterSlice';
 import { BackButton } from 'components/NavButtons';
+import BaseView from 'components/BaseView';
+import { fonts } from 'utils/constants';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { View, HStack, Text, VStack } from 'native-base';
 
 const ResourceTypes = ['Bathroom', 'Parking Lot', 'Elevator', 'Ramp'];
 
@@ -32,7 +38,7 @@ function ResourceSelect({ name }: ResourceSelectProps) {
         }}
       >
       </AppButton>
-      <Text>{name}</Text>
+      <Text color="white" fontSize={12} fontFamily={fonts.medium} marginRight={3}>{name}</Text>
     </View>
   );
 }
@@ -43,31 +49,54 @@ function FilterPage() {
   const filter = useAppSelector((state) => state.filter);
   const updateFilter = (newFilterState: Partial<FilterState>) => dispatch(setFilter({ filter, newFilterState }));
 
+  const navigation = useNavigation();
+  const goBack = () => navigation.goBack();
+
   return (
-    <View style={styles.container}>
+    <BaseView>
       <View style={{ position: 'absolute', top: 50, left: 20, zIndex: 100 }}>
-        <BackButton />
+        <TouchableHighlight onPress={goBack}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+            <AntDesign name='left' size={15} color='white' />
+            <Text style={{
+              color: 'white',
+              fontFamily: 'Montserrat_400Regular',
+              marginLeft: 3,
+            }}>
+              Back
+            </Text>
+          </View>
+        </TouchableHighlight>
       </View>
-      <Text style={styles.header}>Filter</Text>
-
-      <View style={styles.sectionContainer}>
-        <Text style={styles.subsectionHeader}>Resources</Text>
-        <View style={styles.resourceSelectContainer}>
-          {
-            ResourceTypes.map((resource: string) => <ResourceSelect name={resource} />)
-          }
-        </View>
-      </View>
-
-      <View style={styles.sectionContainer}>
-        <Text style={styles.subsectionHeader}>Accessibility Score</Text>
-      </View>
-
-      <View style={styles.sectionContainer}>
-        <Text style={styles.subsectionHeader}>Location</Text>
-
-        <View style={styles.locationInputContainer}>
-          <Text style={styles.locationSectionItem}>Within</Text>
+      <View
+        style={{
+          height: '80%',
+          width: Dimensions.get('window').width * 0.90,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+        }}
+      >
+        <Text color="white" fontSize={24} fontFamily={fonts.medium}>
+          Set Filters
+        </Text>
+        <Text color="white" fontSize={22} fontFamily={fonts.medium}>
+          Resources
+        </Text>
+        <HStack>
+          <ResourceSelect name={ResourceTypes[0]} />
+          <ResourceSelect name={ResourceTypes[1]} />
+          <ResourceSelect name={ResourceTypes[2]} />
+        </HStack>
+        <Text color="white" fontSize={22} fontFamily={fonts.medium}>
+          Accessibility Score
+        </Text>
+        <HStack>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} marginRight={3}>Location within</Text>
           <TextInput
             keyboardType='number-pad'
             style={[
@@ -80,7 +109,7 @@ function FilterPage() {
           >
             300
           </TextInput>
-          <Text style={styles.locationSectionItem}>of</Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium} marginRight={3}>of</Text>
           <TextInput
             style={[
               styles.locationSectionItem,
@@ -92,9 +121,9 @@ function FilterPage() {
           >
             Your Location
           </TextInput>
-        </View>
+        </HStack>
       </View>
-    </View >
+    </BaseView>
   );
 }
 
