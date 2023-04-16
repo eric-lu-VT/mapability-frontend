@@ -20,7 +20,7 @@ function RootNavigation() {
           options={{ header: () => null }}
         />
         <BaseStack.Screen
-          name={StackRoutes.FILTER}
+          name={StackRoutes.MORE_INFO}
           component={InfoPage}
           options={{ header: () => null }}
         />

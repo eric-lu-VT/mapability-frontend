@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text, useDisclose, HStack, VStack, Actionsheet, Center } from 'native-base';
 import useAppSelector from 'hooks/useAppSelector';
 import useAppDispatch from 'hooks/useAppDispatch';
@@ -27,7 +27,9 @@ import {
   Haversine,
   UnitOfDistance,
 } from 'haversine-ts';
-// import MyIcon from '../../../../assets/Vector.png'
+import { SvgCssUri } from 'react-native-svg';
+import VectorSVG from '../../../../assets/Vector.svg';
+
 
 const MapPage = () => {
   const {
@@ -145,7 +147,10 @@ const MapPage = () => {
               borderRadius: 10 / 2,
               backgroundColor: 'red',
             }}
-          /> 
+          >
+           {/* <VectorSVG style={{ paddingbottom : 10 }}/> */}
+                  
+          </View> 
         </Marker>
       </MapView>
       <AppButton
