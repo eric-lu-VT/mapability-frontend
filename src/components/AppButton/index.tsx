@@ -16,6 +16,7 @@ interface AppButtonProps {
   inverted?: boolean
   disabled?: boolean
   textStyle?: StyleProp<TextStyle>
+  children?: React.ReactNode,
 }
 
 const AppButton = ({ 
@@ -24,11 +25,12 @@ const AppButton = ({
   isArrow, 
   fullWidth, 
   style, 
-  textStyle,
   backgroundColor = 'white', 
   textColor = Colors.primary,
   inverted = false,
   disabled = false,
+  textStyle,
+  children,
 }: AppButtonProps) => (
   <TouchableOpacity 
     onPress={onPress} 
@@ -45,6 +47,7 @@ const AppButton = ({
     {
       isArrow && <AntDesign name='caretright' size={25} color='white' />
     }
+    { children }
   </TouchableOpacity>
 );
 

@@ -115,12 +115,12 @@ function MapPage() {
                   <Text color='white' fontSize={8} fontFamily={fonts.regular}>
                     {allBathrooms[bathroomId].name}
                   </Text>
-                  <Image
+                  {/* <Image
                     source={require('../../../../assets/Vector.png')}
                     style={{
                       paddingBottom: 10,
                     }}
-                  />
+                  /> */}
                 </Marker>
               );
             })
@@ -147,22 +147,6 @@ function MapPage() {
           </View>
         </Marker>
       </MapView>
-      <AppButton
-        title="____"
-        disabled={false}
-        style={{
-          position: 'absolute',
-          top: '6.5%',
-          left: '5%',
-          backgroundColor: '#00B4C5',
-          borderRadius: 0,
-          height: 70,
-          width: 70,
-        }}
-        onPress={() => {
-
-        }}
-      />
       {
         pageMode == 'MainMap' ?
           <MapMode setPageMode={setPageMode} />
