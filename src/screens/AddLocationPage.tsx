@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BackButton } from 'components/NavButtons';
 import FormatStyle from 'utils/FormatStyle';
+import { IBathroom } from 'types/bathrooms';
 
 export type Resource = {
   name: string;
@@ -26,20 +27,19 @@ export type Resource = {
   reviews: string[];
 };
 const AddLocationPage = () => {
-  const [resource, setResource] = useState<Resource>({
+  const [resource, setResource] = useState<Omit<IBathroom, 'id' | 'location'>>({
     name: '',
     // TODO: Add location
     description: '',
     unisex: false,
-    isAccessible: false,
     levels: [],
     hasElevatorAccess: false,
+    hasGrabBars: false,
     isSingleUse: false,
     buildingRampAccess: false,
     changingTable: false,
     accessibleDoor: false,
-    hasMentstrualProducts: false,
-    reviews: [],
+    hasMenstrualProducts: false,
   });
 
   const RESOURCE_NAMES = ['Bathroom', 'Elevator', 'Ramp', 'Parking'];
