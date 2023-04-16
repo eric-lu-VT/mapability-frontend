@@ -94,15 +94,11 @@ const BaseNavigation = () => {
             marginTop: 50,
           },
         }}
-        initialRouteName={BaseTabRoutes.FRONT_NAV}
+        initialRouteName={BaseTabRoutes.MAP_NAV}
       >
         <BaseTab.Screen
-          name={BaseTabRoutes.MAP_NAV}
-          component={
-            ProtectedRoute([UserScopes.User, UserScopes.Admin])
-              ? MapNavigator
-              : ForbiddenPage
-          }
+          name={BaseTabRoutes.FRONT_NAV}
+          component={FrontNavigator}
           options={{ tabBarIcon: () => (
             <HStack width={35} height={35} alignItems='center' justifyContent='center'>
               <ProfileNavBaseIcon style={{ position: 'absolute' }} />
@@ -110,8 +106,12 @@ const BaseNavigation = () => {
           ) }}
         />
         <BaseTab.Screen
-          name={BaseTabRoutes.FRONT_NAV}
-          component={FrontNavigator}
+          name={BaseTabRoutes.MAP_NAV}
+          component={
+            ProtectedRoute([UserScopes.User, UserScopes.Admin])
+              ? MapNavigator
+              : ForbiddenPage
+          }
           options={{ tabBarIcon: () => <RingsIcon /> }}
         />
         <BaseTab.Screen
