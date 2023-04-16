@@ -8,6 +8,7 @@ import useAppDispatch from 'hooks/useAppDispatch';
 import AppButton from 'components/AppButton';
 import { IBathroom } from 'types/bathrooms';
 import { createBathroom } from 'redux/slices/bathroomsSlice';
+import { fonts } from 'utils/constants';
 
 type FormProps = {
   resource: Omit<IBathroom, 'id' | 'location'>;
@@ -29,12 +30,18 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView
+      style={{
+        width: '100%',
+      }}
+    >
       <FormControl style={styles.container}>
         <View style={styles.row}>
-          <Text style={styles.texty}>Name: </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
+            Name: 
+          </Text>
           <TextInput
-            style={{ width: 300, fontSize: 18 }}
+            style={{ width: 300, fontSize: 18, marginLeft: 10, color: 'white' }}
             placeholder='Name'
             maxLength={20}
             value={resource.name}
@@ -44,9 +51,11 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           />
         </View>
         <View style={styles.row}>
-          <Text style={styles.texty}>Description: </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
+            Description: 
+          </Text>
           <TextInput
-            style={{ width: 250, fontSize: 18 }}
+            style={{ width: 250, fontSize: 18, marginLeft: 10 }}
             placeholder='Description'
             maxLength={20}
             value={resource.description}
@@ -56,7 +65,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
           />
         </View>
         <View style={styles.row}>
-          <Text style={styles.texty}>Gender Neutral? </Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>Gender Neutral? </Text>
           <Checkbox
             style={styles.check}
             value=''
@@ -68,7 +77,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
             Is this location elevator accessible?
           </Text>
           <Checkbox
@@ -85,7 +94,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>Is this bathroom single use?</Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>Is this bathroom single use?</Text>
           <Checkbox
             style={styles.check}
             value=''
@@ -97,7 +106,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>Is the building ramp accessible?</Text>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>Is the building ramp accessible?</Text>
           <Checkbox
             style={styles.check}
             value=''
@@ -112,7 +121,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
             Does this bathroom have a changing table?
           </Text>
           <Checkbox
@@ -129,7 +138,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
             Does this bathroom have an accessible door?
           </Text>
           <Checkbox
@@ -146,7 +155,7 @@ export const Form: React.FC<FormProps> = ({ resource, setResource }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.texty}>
+          <Text color="white" fontSize={18} fontFamily={fonts.medium}>
             Does this bathroom have menstrual products?
           </Text>
           <Checkbox
