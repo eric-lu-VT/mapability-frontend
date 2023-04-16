@@ -3,11 +3,17 @@ import { SERVER_URL } from 'utils/constants.js';
 import axios from 'axios';
 
 export interface GoogleState {
-  test: boolean // is connected to backend; does not necessarily mean user is logged in
+  formatted_address: string,
+  name: string,
+  place_id: string,
+  vicinity: string,
 }
 
 const initialState: GoogleState = {
-  test: false,
+  formatted_address: '',
+  name: '',
+  place_id: '',
+  vicinity: '',
 };
 
 export const googleReverseGeocode = createAsyncThunk(
@@ -25,17 +31,24 @@ export const googleReverseGeocode = createAsyncThunk(
   },
 );
 
-export const connectionSlice = createSlice({
+export const googleSlice = createSlice({
   name: 'google',
   initialState,
   reducers: {
-    setSelectedGooglePlace: (state, action) => ({ ...state, selectedBathroomId: action.payload }),
+    resetGooglePlace: () => ({ ...initialState }),
   },
   extraReducers: (builder) => {
     builder.addCase(googleReverseGeocode.fulfilled, (state, action) => {
-
+      const res = action.payload as any; // Not great casting but whatever
+      state.formatted_address = res.result?.formatted_address || '';
+      state.name = res.result?.name || '';
+      state.place_id = res.result?.place_id || '';
+      state.vicinity = res.result?.vicinity || '';
     });
   },
 });
 
-export default connectionSlice.reducer;
+export const { resetGooglePlace } =
+  googleSlice.actions;
+
+export default googleSlice.reducer;

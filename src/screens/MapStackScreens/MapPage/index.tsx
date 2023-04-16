@@ -17,7 +17,7 @@ import MapView, {
 import { fonts } from 'utils/constants';
 import { MapStackRoutes } from 'navigation/routeTypes';
 import { getBathroomsByLocationRange, setSelectedBathroom } from 'redux/slices/bathroomsSlice';
-import { googleReverseGeocode } from 'redux/slices/googleSlice';
+import { googleReverseGeocode, resetGooglePlace } from 'redux/slices/googleSlice';
 import AppButton from 'components/AppButton';
 import { StackRoutes } from 'nav/routeTypes';
 import { background } from 'native-base/lib/typescript/theme/styled-system';
@@ -80,6 +80,8 @@ const MapPage = () => {
 
   const allBathrooms = useAppSelector((state) => state.bathrooms.all);
   const [isAddMode, setIsAddMode] = useState<boolean>(false);
+
+  const googleInfo = useAppSelector((state) => state.google);
 
   return (
     <>
@@ -169,6 +171,22 @@ const MapPage = () => {
         <>
           <AppButton
             //Filters
+            title={googleInfo.name}
+            disabled={true}
+            style={{
+              position: 'absolute',
+              top: '6.5%',
+              left: 0,
+              right:0,
+              backgroundColor: '#D9D9D9',
+              borderRadius: 50,
+              height: 70,
+              width: 70,
+            }}
+            onPress={() => {}}
+          />
+          <AppButton
+            //Filters
             title=''
             disabled={false}
             style={{
@@ -239,6 +257,7 @@ const MapPage = () => {
               width: 70,
             }}
             onPress={() => {
+              dispatch(resetGooglePlace());
               setIsAddMode(!isAddMode);
             }}
           />
