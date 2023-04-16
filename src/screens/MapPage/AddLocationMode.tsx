@@ -44,6 +44,7 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
         }}
         onPress={() => {
           setPageMode('MainMap');
+          navigation.navigate(StackRoutes.ADD_LOC);
         }}
       />
       <AppButton
@@ -59,7 +60,7 @@ function AddLocationMode({ setPageMode }: AddLocationModeProps) {
           width: 70,
         }}
         onPress={() => {
-          navigation.navigate(StackRoutes.ADD_LOC);
+          setPageMode('MainMap');
         }}
       />
     </>
