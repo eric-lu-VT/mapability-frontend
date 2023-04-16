@@ -23,13 +23,15 @@ import {
 } from 'haversine-ts';
 import MapMode from './MapMode';
 import AddLocationMode from './AddLocationMode';
+import SearchMode from './SearchMode';
 import VectorIcon from '../../assets/VectorIcon.svg';
 import { FontAwesome5, Feather } from '@expo/vector-icons';
 
 export type MapPageMode =
   | 'MainMap'
   | 'AddLocation'
-  | 'LocationSelected';
+  | 'LocationSelected'
+  | 'Search';
 
 function MapPage() {
   const {
@@ -44,7 +46,7 @@ function MapPage() {
     useState<PermissionStatus>();
 
   const filter = useAppSelector((state) => state.filter); 
-  const { latitude, longitude } = useAppSelector((state) => state.connection);
+  const { latitude, longitude, tempLatitude, tempLongitude } = useAppSelector((state) => state.connection);
   const selectedBathroomId = useAppSelector((state) => state.bathrooms.selectedBathroomId);
   useEffect(() => {
     (async () => {
@@ -89,7 +91,7 @@ function MapPage() {
         style={styles.map}
         userInterfaceStyle='light'
         ref={mapRef}
-        mapType={isSatelliteMode ? 'satellite' : 'standard' }
+        mapType={isSatelliteMode ? 'satellite' : 'standard'}
         showsCompass={true}
         showsScale={true}
         followsUserLocation={true}
@@ -125,27 +127,49 @@ function MapPage() {
               );
             })
         }
-        <Marker
-          key={'Your Pos'}
-          coordinate={{ latitude, longitude }}
-          style={{
-            alignItems: 'center',
-          }}
-        >
-          <Text color={(isSatelliteMode) ? 'white' : 'black'} fontSize={8} fontFamily={fonts.regular}>
-            Your position
-          </Text>
-          <View
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: 10 / 2,
-              backgroundColor: 'red',
-            }}
-          >
-
-          </View>
-        </Marker>
+        {
+          pageMode !== 'Search' ?
+            <Marker
+              key={'Your Pos'}
+              coordinate={{ latitude, longitude }}
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text color={(isSatelliteMode) ? 'white' : 'black'} fontSize={8} fontFamily={fonts.regular}>
+                Your position
+              </Text>
+              <View
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 10 / 2,
+                  backgroundColor: 'red',
+                }}
+              />
+            </Marker>
+            :
+            <Marker
+              key={'Your New Pos'}
+              coordinate={{ latitude: tempLatitude, longitude: tempLongitude }}
+              style={{
+                alignItems: 'center',
+              }}
+              draggable={true}
+            >
+              <Text color={(isSatelliteMode) ? 'white' : 'black'} fontSize={8} fontFamily={fonts.regular}>
+                Your new position
+              </Text>
+              <View
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 10 / 2,
+                  backgroundColor: 'red',
+                }}
+              />
+            </Marker>
+        }
       </MapView>
       {
         pageMode == 'MainMap' ?
@@ -177,12 +201,16 @@ function MapPage() {
           onPress={() => { setIsSatelliteMode(!isSatelliteMode); }}
         >
           {
-            isSatelliteMode ? 
-              <Feather name='map' size={30} color='black' style={{ paddingTop: 5 }}/>
+            isSatelliteMode ?
+              <Feather name='map' size={30} color='black' style={{ paddingTop: 5 }} />
               :
-              <FontAwesome5 name='satellite-dish' size={30} color={'black'} style={{ paddingTop: 5 }}/>
+              <FontAwesome5 name='satellite-dish' size={30} color={'black'} style={{ paddingTop: 5 }} />
           }
         </AppButton>
+      }
+      {
+        pageMode === 'Search' &&
+        <SearchMode setPageMode={setPageMode} mapRef={mapRef} />
       }
       <Actionsheet isOpen={isOpen} onClose={() => {
         dispatch(setSelectedBathroom(''));
