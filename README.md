@@ -1,4 +1,8 @@
-# Frontend
+# MapAbility
+
+Mobile frontend for the MapAbility app. 
+
+(Make sure to check out the backend [here](https://github.com/eric-lu-VT/mapability-backend)!)
 
 ## Inspiration
 We saw how _inaccessible_ much of the Dartmouth campus can be after speaking to some of our friends with disabilities. Our idea for MapAbility was born to help members of the disabled community find nearby accessible resources and to facilitate actions for them that many of us take for granted.
